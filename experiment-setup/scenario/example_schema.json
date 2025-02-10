@@ -1,0 +1,29 @@
+{
+  "tasks": [
+    {
+      "name": "PUBLIC TIMELINE",
+      "description": "Access the public timeline",
+      "endpoint": "/public",
+      "method": "GET"
+    },
+    {
+      "name": "LOGIN",
+      "description": "Login to the system",
+      "endpoint": "/login",
+      "method": "POST",
+      "data": {
+        "username": "{username}",
+        "password": "admin"
+      }
+    },
+    {
+      "name": "FOLLOW USER",
+      "description": "Follow a user",
+      "endpoint": "/{username}/follow",
+      "method": "POST",
+      "data": {
+        "username": "user1"
+      }
+    }
+  ]
+}
