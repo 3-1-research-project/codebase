@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'python-flask/**'
+      - 'python-django/**'
       - 'c-sharp-razor/**'
       - 'rust-actix/**'
       - 'ruby-sinatra/**'
@@ -19,6 +20,7 @@ on:
       - main
     paths:
       - 'python-flask/**'
+      - 'python-django/**'
       - 'c-sharp-razor/**'
       - 'rust-actix/**'
       - 'ruby-sinatra/**'
