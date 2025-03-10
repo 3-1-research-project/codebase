@@ -28,6 +28,10 @@ on:
       - 'go-gin/**'
       - 'go-gorilla/**'
 
+env:
+  BASE_URL: http://localhost:5000
+  DATABASE_URL: postgresql://user:pass@localhost:5432/waect
+
 jobs:
   check-root-changes:
     name: Check Root-Level Changes
