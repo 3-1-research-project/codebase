@@ -2,8 +2,10 @@ import pytest
 import requests
 import psycopg2
 
-BASE_URL = "http://localhost:5000"
-DATABASE_URL = "postgresql://user:pass@localhost:5432/waect"
+from helpers import test_helper
+from helpers.postgres_helper import DATABASE_URL
+from test_api_endpoints import BASE_URL
+
 
 def register_user(username, email, password, user_session=None):
     """
@@ -24,6 +26,7 @@ def register_user(username, email, password, user_session=None):
     }
     return user_session.post(register_url, data=data, allow_redirects=True)
 
+
 def login_user(username, password, user_session=None):
     """
     Log in a user with the given username and password.
@@ -40,6 +43,7 @@ def login_user(username, password, user_session=None):
     }
     return user_session.post(login_url, data=data, allow_redirects=True)
 
+
 def follow_user(follow_username, user_session=None):
     """
     Follow another user.
@@ -51,6 +55,7 @@ def follow_user(follow_username, user_session=None):
     follow_url = f"{BASE_URL}/{follow_username}/follow"
     return user_session.get(follow_url, allow_redirects=True)
 
+
 def unfollow_user(unfollow_username, user_session=None):
     """
     Unfollow another user.
@@ -61,6 +66,7 @@ def unfollow_user(unfollow_username, user_session=None):
     """
     unfollow_url = f"{BASE_URL}/{unfollow_username}/unfollow"
     return user_session.get(unfollow_url, allow_redirects=True)
+
 
 def post_message(message_text, user_session=None):
     """
@@ -74,6 +80,7 @@ def post_message(message_text, user_session=None):
     data = {"text": message_text}
     return user_session.post(post_message_url, data=data, allow_redirects=True)
 
+
 def logout_user(user_session=None):
     """
     Log out the current user.
@@ -83,6 +90,7 @@ def logout_user(user_session=None):
     """
     logout_url = f"{BASE_URL}/logout"
     return user_session.get(logout_url, allow_redirects=True)
+
 
 def clean_database():
     """
@@ -95,6 +103,7 @@ def clean_database():
             cur.execute("TRUNCATE TABLE messages CASCADE;")
             conn.commit()
 
+
 @pytest.fixture(scope="module")
 def user1_session():
     """
@@ -102,6 +111,7 @@ def user1_session():
     """
     session = requests.Session()
     return session
+
 
 @pytest.fixture(scope="module", autouse=True)
 def fetch_public_page():
@@ -113,6 +123,7 @@ def fetch_public_page():
     assert response.status_code == 200
     return response
 
+
 @pytest.fixture(scope="session", autouse=True)
 def cleanup_db_after_tests():
     """
@@ -121,7 +132,9 @@ def cleanup_db_after_tests():
     yield  # Let all tests execute
     clean_database()
 
+
 ### Test Cases ########################################################################################################
+
 
 def test_register_flash(user1_session):
     """
@@ -132,6 +145,7 @@ def test_register_flash(user1_session):
     assert response.status_code == 200, "register failed"
     assert expected_flash in response.text
 
+
 def test_login_flash(user1_session):
     """
     Test flash message for user login.
@@ -141,25 +155,28 @@ def test_login_flash(user1_session):
     assert response.status_code == 200, "login failed"
     assert expected_flash in response.text
 
+
 def test_user1_follow_user2_flash(user1_session):
     """
     Test flash message for user1 following user2.
     """
     user2_session = requests.Session()
     register_user("user2", "user2@waect.com", "waect", user2_session)
-    expected_flash = f'You are now following user2'
+    expected_flash = f"You are now following user2"
     response = follow_user("user2", user1_session)
     assert response.status_code == 200, "follow failed"
     assert expected_flash in response.text
+
 
 def test_user1_unfollow_user2_flash(user1_session):
     """
     Test flash message for user1 unfollowing user2.
     """
-    expected_flash = 'You are no longer following user2'
+    expected_flash = "You are no longer following user2"
     response = unfollow_user("user2", user1_session)
     assert response.status_code == 200, "unfollow failed"
     assert expected_flash in response.text
+
 
 def test_user1_post_message_flash(user1_session):
     """
@@ -169,6 +186,7 @@ def test_user1_post_message_flash(user1_session):
     response = post_message("Hello, world!", user1_session)
     assert response.status_code == 200, "post message failed"
     assert expected_flash in response.text
+
 
 def test_logout_flash(user1_session):
     """

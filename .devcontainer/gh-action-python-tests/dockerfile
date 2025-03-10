@@ -1,0 +1,10 @@
+FROM mcr.microsoft.com/devcontainers/base:jammy
+
+RUN apt-get update \
+    && apt install \
+        python3 \
+        python3-pip \
+        libpq-dev \
+        -y
+
+CMD sleep infinity

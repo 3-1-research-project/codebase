@@ -27,6 +27,12 @@ on:
       - 'javascript-express/**'
       - 'go-gin/**'
       - 'go-gorilla/**'
+      
+  workflow_dispatch:
+
+env:
+  BASE_URL: http://localhost:5000
+  DATABASE_URL: postgresql://user:pass@localhost:5432/waect
 
 jobs:
   check-root-changes:
@@ -93,6 +99,8 @@ jobs:
           python3 -m venv venv
           ./venv/bin/pip install --upgrade pip
           ./venv/bin/pip install --no-cache-dir -r tests/requirements.txt
+          ./venv/bin/playwright install-deps
+          ./venv/bin/playwright install
 
           # Run all tests
           source ./venv/bin/activate
@@ -147,6 +155,8 @@ jobs:
           python3 -m venv venv
           ./venv/bin/pip install --upgrade pip
           ./venv/bin/pip install --no-cache-dir -r tests/requirements.txt
+          ./venv/bin/playwright install-deps
+          ./venv/bin/playwright install
 
           # Run service-specific tests
           source ./venv/bin/activate
