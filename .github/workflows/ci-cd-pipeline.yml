@@ -27,6 +27,8 @@ on:
       - 'javascript-express/**'
       - 'go-gin/**'
       - 'go-gorilla/**'
+      
+  workflow_dispatch:
 
 env:
   BASE_URL: http://localhost:5000
