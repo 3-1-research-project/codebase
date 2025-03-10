@@ -1,9 +1,10 @@
+import os
 import json
 import base64
 import psycopg2
 import requests
 
-BASE_URL = "http://localhost:5000/api"
+BASE_URL = f"{os.environ['MINITWIT_URL']}/api"
 USERNAME = 'simulator'
 PWD = 'super_safe!'
 CREDENTIALS = ':'.join([USERNAME, PWD]).encode('ascii')
@@ -14,8 +15,6 @@ HEADERS = {'Connection': 'close',
 
 # Get the database URL from the environment variable
 DATABASE_URL = "postgresql://user:pass@localhost:5432/waect"
-
-print(DATABASE_URL)
 
 def clean_database(truncate_all:bool = False):
     with psycopg2.connect(DATABASE_URL) as conn:
