@@ -5,8 +5,8 @@ import psycopg2
 import requests
 
 from helpers.postgres_helper import DATABASE_URL
+from helpers.test_helper import BASE_URL
 
-BASE_URL = f"{os.environ['MINITWIT_URL']}/api"
 USERNAME = "simulator"
 PWD = "super_safe!"
 CREDENTIALS = ":".join([USERNAME, PWD]).encode("ascii")
