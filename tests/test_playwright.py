@@ -25,7 +25,7 @@ SIGN_OUT_URL = f"{BASE_URL}/logout"
 USER_TIMELINE_URL = f"{BASE_URL}/user"
 
 
-def sign_in_using_playwrght(page: Page, useTestUser=True):
+def sign_in_using_playwright(page: Page, useTestUser=True):
     if not useTestUser:
         page.goto(SIGN_UP_URL)
         global username, email, password
@@ -97,7 +97,7 @@ def test_public_timeline_header_and_tweet_list_show(page: Page):
 
 
 def test_public_timeline_user_can_tweet_and_is_shown(page: Page):
-    sign_in_using_playwrght(page)
+    sign_in_using_playwright(page)
 
     page.goto(PUBLIC_TIMELINE_URL)
 
@@ -180,7 +180,7 @@ def test_sign_in_works_redirects_to_my_timeline(page: Page):
 
 
 def test_my_timeline_tweet_box_and_message_list(page: Page):
-    sign_in_using_playwrght(page)
+    sign_in_using_playwright(page)
 
     page.goto(MY_TIMELINE_URL)
 
@@ -190,7 +190,7 @@ def test_my_timeline_tweet_box_and_message_list(page: Page):
 
 
 def test_my_timeline_user_can_tweet_and_message_is_shown(page: Page):
-    sign_in_using_playwrght(page)
+    sign_in_using_playwright(page)
 
     page.goto(MY_TIMELINE_URL)
     page.wait_for_url(MY_TIMELINE_URL)
@@ -220,7 +220,7 @@ def test_my_timeline_shows_followed_tweets_and_my_own_tweets(page: Page):
 
 
 def test_logout_logs_out_user_and_redirects_to_public_timeline(page: Page):
-    sign_in_using_playwrght(page)
+    sign_in_using_playwright(page)
 
     page.goto(SIGN_OUT_URL)
 
@@ -232,7 +232,7 @@ def test_logout_logs_out_user_and_redirects_to_public_timeline(page: Page):
 
 
 def test_follow_and_unfollow(page: Page):
-    sign_in_using_playwrght(page, useTestUser=False)
+    sign_in_using_playwright(page, useTestUser=False)
 
     page.goto(f"{USER_TIMELINE_URL}/{test_username}")
 

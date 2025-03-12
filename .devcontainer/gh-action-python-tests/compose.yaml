@@ -9,7 +9,7 @@ services:
       - ../..:/workspaces:cached
     environment:
       - DATABASE_URL=postgresql://postgres:1234@postgres-gh-actions-python-tests:5432/postgres
-      - MINITWIT_URL=http://minitwit-python-flask:5000
+      - BASE_URL=http://minitwit-python-flask:5000
 
   minitwit-python-flask:
     image: minitwit-python-flask
