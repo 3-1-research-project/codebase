@@ -103,7 +103,7 @@ def test_public_timeline_user_can_tweet_and_is_shown(page: Page):
 
     tweet = generate_random_username()
     page.locator("input[name='text']").fill(tweet)
-    page.locator("input[type='submit']").click
+    page.locator("input[type='submit']").click()
 
     expect(page.get_by_text(tweet)).to_be_visible()
 
