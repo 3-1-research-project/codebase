@@ -151,6 +151,8 @@ def test_register_works_redirects_to_sign_in(page: Page):
     page.locator("input[name='password2']").fill(password)
     page.locator("input[type='submit']").click()
 
+    assert page.url == SIGN_IN_URL
+
     does_user_exist_in_db = fetch_postgres_query(
         f"SELECT count(*) FROM users WHERE username = '{username}'"
     )
