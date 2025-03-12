@@ -11,6 +11,7 @@ on:
       - 'rust-actix/**'
       - 'ruby-sinatra/**'
       - 'javascript-express/**'
+      - 'java-spring/**'
       - 'go-gin/**'
       - 'go-gorilla/**'
       - 'database/**'
@@ -25,6 +26,7 @@ on:
       - 'rust-actix/**'
       - 'ruby-sinatra/**'
       - 'javascript-express/**'
+      - 'java-spring/**'
       - 'go-gin/**'
       - 'go-gorilla/**'
 
@@ -169,6 +171,7 @@ jobs:
           - javascript-express
           - go-gin
           - go-gorilla
+          - java-spring
     steps:
       - name: Check if Tests Succeeded
         if: ${{ github.ref != 'refs/heads/main' }}
@@ -195,6 +198,7 @@ jobs:
             javascript-express/**
             go-gin/**
             go-gorilla/**
+            java-spring/**
 
       - name: Determine if Service Needs Build
         id: check_changes
