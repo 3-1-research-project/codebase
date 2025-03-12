@@ -60,7 +60,7 @@ def sign_in_user_using_playwright(page: Page, user: User):
 
 
 test_username = "test"
-test_email = "test@test.com"
+test_email = "test@test.test"
 test_password = "test"
 
 execute_postgres_query("truncate table users, followers, messages, latest;")
