@@ -402,7 +402,10 @@ public class MiniTwitController {
                 return template;
             }
         }
-
+        if (logout != null) {
+            redirectAttributes.addFlashAttribute("flashMessage", "You were logged out");
+            return "redirect:/public";
+        }
         String template = "login.html";
         logger.info("Request ID: %s -- Returning template: %s".formatted( model.getAttribute("requestID"), template));
         return template;
