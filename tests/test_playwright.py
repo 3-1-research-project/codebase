@@ -24,7 +24,6 @@ SIGN_IN_URL = f"{BASE_URL}/login"
 SIGN_OUT_URL = f"{BASE_URL}/logout"
 USER_TIMELINE_URL = f"{BASE_URL}/user"
 
-
 def sign_in_using_playwright(page: Page, useTestUser=True):
     if not useTestUser:
         page.goto(SIGN_UP_URL)
@@ -43,10 +42,12 @@ def sign_in_using_playwright(page: Page, useTestUser=True):
     page.goto(SIGN_IN_URL)
 
     page.locator("input[name='username']").fill(
-        test_username if useTestUser else username
+        test_username if useTestUser else username, 
+        
     )
     page.locator("input[name='password']").fill(
-        test_password if useTestUser else password
+        test_password if useTestUser else password,
+        
     )
     page.locator("input[type='submit']").click()
 
