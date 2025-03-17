@@ -2,12 +2,24 @@ import json
 import logging
 
 from django.contrib.auth.models import User
-from django.http import HttpResponse, JsonResponse
+from django.db import connection
+from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 
 from . import models
 
+import gc
+
 LATEST = 0
+
+
+def garbage_collection():
+    try:
+        with open("gc_debug.log", "a") as log_file:
+            print(str(gc.get_stats()))
+            log_file.write(str(gc.get_stats()) + "\n")
+    except Exception as e:
+        return JsonResponse({"status": 500, "error_msg": str(e)}, status=500)
 
 
 # Get latest
@@ -80,7 +92,8 @@ def user_msgs(request, username):
     if auth_check:
         return auth_check  # Returns 403 response if unauthorized
 
-    update_latest(request)
+    # TODO probably fix this
+    # update_latest(request)
 
     if request.method == "GET":
         amount = int(request.GET.get("no", 100))

@@ -8,14 +8,25 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.models import User
 from django.db import connection
-from django.http import HttpResponseNotFound, HttpResponseServerError, HttpResponseBadRequest
+from django.http import HttpResponseNotFound, HttpResponseServerError, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import redirect, render
 from urllib.parse import urlencode
 from django.contrib import messages
 
 from . import models
 
+import gc
+
 PER_PAGE = 30
+
+
+def garbage_collection():
+    try:
+        with open("gc_debug.log", "a") as log_file:
+            # print(str(gc.get_stats()))
+            log_file.write(str(gc.get_stats()) + "\n")
+    except Exception as e:
+        return JsonResponse({"status": 500, "error_msg": str(e)}, status=500)
 
 
 def query_db(query, args=(), one=False):
@@ -98,7 +109,10 @@ def public_timeline(request, amount=PER_PAGE):
                "amount": amount, "test": "/public",
                "error": [msg for msg in stored_messages if msg.level == messages.ERROR],
                "flashes": [msg for msg in stored_messages if msg.level != messages.ERROR]}
-    return render(request, "timeline.html", context)
+
+    html = render(request, "timeline.html", context)
+    garbage_collection()
+    return html
 
 
 def user_timeline(request, username, amount=PER_PAGE):
@@ -133,11 +147,16 @@ def user_timeline(request, username, amount=PER_PAGE):
         "amount": amount + PER_PAGE,
         "flashes": messages.get_messages(request),
     }
-    return render(request, "timeline.html", context)
+
+    html = render(request, "timeline.html", context)
+    garbage_collection()
+    return html
 
 
 def follow_user(request, username):
     """Adds the current user as follower of the given user."""
+
+    print("in follow")
 
     if not request.user:
         return redirect("login/")
@@ -160,6 +179,8 @@ def follow_user(request, username):
 
 def unfollow_user(request, username):
     """Adds the current user as follower of the given user."""
+
+    print("in UNfollow")
 
     if not request.user:
         return redirect("public/")

@@ -2,6 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+import gc
 
 
 def main():
@@ -19,4 +20,9 @@ def main():
 
 
 if __name__ == "__main__":
+    # log_file = open("gc_debug.log", "w")
+
+    # sys.stderr = log_file
+    # gc.set_debug(gc.DEBUG_STATS)
     main()
+    # sys.stderr = sys.__stderr__
