@@ -1,3 +1,4 @@
+import json
 from django.http import HttpResponse
 import datetime
 from datetime import datetime
@@ -20,13 +21,22 @@ import gc
 PER_PAGE = 30
 
 
-def garbage_collection():
+def garbage_collection(action: str):
     try:
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        gc_data = gc.get_stats()
+
+        log_entry = {
+            "date": timestamp,
+            "action": action,
+            "generations": gc_data
+        }
+
         with open("gc_debug.log", "a") as log_file:
-            # print(str(gc.get_stats()))
-            log_file.write(str(gc.get_stats()) + "\n")
+            log_file.write(json.dumps(log_entry) + "\n")
+
     except Exception as e:
-        return JsonResponse({"status": 500, "error_msg": str(e)}, status=500)
+        print(f"Error logging garbage collection: {e}")
 
 
 def query_db(query, args=(), one=False):
@@ -111,7 +121,7 @@ def public_timeline(request, amount=PER_PAGE):
                "flashes": [msg for msg in stored_messages if msg.level != messages.ERROR]}
 
     html = render(request, "timeline.html", context)
-    garbage_collection()
+    garbage_collection("public_timeline")
     return html
 
 
@@ -149,7 +159,7 @@ def user_timeline(request, username, amount=PER_PAGE):
     }
 
     html = render(request, "timeline.html", context)
-    garbage_collection()
+    garbage_collection("user_timeline")
     return html
 
 
@@ -174,6 +184,7 @@ def follow_user(request, username):
 
     messages.info(request, f"You are now following {username}")
 
+    garbage_collection("follow_user")
     return redirect("user_timeline", username=username)
 
 
@@ -199,6 +210,7 @@ def unfollow_user(request, username):
     follow.delete()
     messages.info(request, f"You are no longer following {username}")
 
+    garbage_collection("unfollow_user")
     return redirect("user_timeline", username=username)
 
 
@@ -218,6 +230,8 @@ def login(request):
             auth_login(request, user)
             messages.info(request, "You were logged in")
             return redirect("/")
+    
+    garbage_collection("login")
     return render(request, "../templates/login.html", {"flashes": messages.get_messages(request)})
 
 
@@ -251,6 +265,7 @@ def register(request):
                     request, "You were successfully registered and can login now")
                 return redirect("login")
 
+    garbage_collection("register")
     return render(request, "../templates/register.html", {"error": error})
 
 
@@ -258,6 +273,8 @@ def logout(request):
     """Logout"""
     auth_logout(request)
     messages.info(request, "You were logged out")
+
+    garbage_collection("logout")
     return redirect("public")
 
 
@@ -278,6 +295,8 @@ def add_message(request):
         messages.info(request, "Your message was recorded")
     else:
         return HttpResponseNotFound("User not logged in")
+    
+    garbage_collection("add_message")
     return redirect("public")
 
 
