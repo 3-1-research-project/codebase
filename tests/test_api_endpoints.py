@@ -7,6 +7,8 @@ import requests
 from helpers.postgres_helper import DATABASE_URL
 from helpers.test_helper import BASE_URL
 
+API_URL = f"{BASE_URL}/api"
+
 USERNAME = "simulator"
 PWD = "super_safe!"
 CREDENTIALS = ":".join([USERNAME, PWD]).encode("ascii")
@@ -83,13 +85,13 @@ def test_register():
     data = {"username": username, "email": email, "pwd": pwd}
     params = {"latest": 1}
     response = session.post(
-        f"{BASE_URL}/register", data=json.dumps(data), params=params
+        f"{API_URL}/register", data=json.dumps(data), params=params
     )
     assert response.ok
     # TODO: add another assertion that it is really there
 
     # verify that latest was updated
-    response = session.get(f"{BASE_URL}/latest")
+    response = session.get(f"{API_URL}/latest")
     assert response.json()["latest"] == 1
 
 
@@ -101,13 +103,13 @@ def test_register_b():
     data = {"username": username, "email": email, "pwd": pwd}
     params = {"latest": 5}
     response = session.post(
-        f"{BASE_URL}/register", data=json.dumps(data), params=params
+        f"{API_URL}/register", data=json.dumps(data), params=params
     )
     assert response.ok
     # TODO: add another assertion that it is really there
 
     # verify that latest was updated
-    response = session.get(f"{BASE_URL}/latest")
+    response = session.get(f"{API_URL}/latest")
     assert response.json()["latest"] == 5
 
 
@@ -119,26 +121,26 @@ def test_register_c():
     data = {"username": username, "email": email, "pwd": pwd}
     params = {"latest": 6}
     response = session.post(
-        f"{BASE_URL}/register", data=json.dumps(data), params=params
+        f"{API_URL}/register", data=json.dumps(data), params=params
     )
     assert response.ok
 
     # verify that latest was updated
-    response = session.get(f"{BASE_URL}/latest")
+    response = session.get(f"{API_URL}/latest")
     assert response.json()["latest"] == 6
 
 
 def test_latest():
     session = create_new_session()
     # post something to update LATEST
-    url = f"{BASE_URL}/register"
+    url = f"{API_URL}/register"
     data = {"username": "test", "email": "test@test", "pwd": "foo"}
     params = {"latest": 1337}
     response = session.post(url, data=json.dumps(data), params=params)
     assert response.ok
 
     # verify that latest was updated
-    url = f"{BASE_URL}/latest"
+    url = f"{API_URL}/latest"
     response = session.get(url)
     assert response.ok
     assert response.json()["latest"] == 1337
@@ -148,13 +150,13 @@ def test_create_msg():
     session = create_new_session()
     username = "aa"
     data = {"content": "Blub!"}
-    url = f"{BASE_URL}/msgs/{username}"
+    url = f"{API_URL}/msgs/{username}"
     params = {"latest": 2}
     response = session.post(url, data=json.dumps(data), params=params)
     assert response.ok
 
     # verify that latest was updated
-    response = session.get(f"{BASE_URL}/latest")
+    response = session.get(f"{API_URL}/latest")
     assert response.json()["latest"] == 2
 
 
@@ -162,7 +164,7 @@ def test_get_latest_user_msgs():
     session = create_new_session()
     username = "aa"
     query = {"no": 20, "latest": 3}
-    url = f"{BASE_URL}/msgs/{username}"
+    url = f"{API_URL}/msgs/{username}"
     response = session.get(url, params=query)
     assert response.status_code == 200
 
@@ -174,7 +176,7 @@ def test_get_latest_user_msgs():
     assert got_it_earlier
 
     # verify that latest was updated
-    response = session.get(f"{BASE_URL}/latest")
+    response = session.get(f"{API_URL}/latest")
     assert response.json()["latest"] == 3
 
 
@@ -182,7 +184,7 @@ def test_get_latest_msgs():
     session = create_new_session()
     username = "aa"
     query = {"no": 20, "latest": 4}
-    url = f"{BASE_URL}/msgs"
+    url = f"{API_URL}/msgs"
     response = session.get(url, params=query)
     assert response.status_code == 200
 
@@ -194,14 +196,14 @@ def test_get_latest_msgs():
     assert got_it_earlier
 
     # verify that latest was updated
-    response = session.get(f"{BASE_URL}/latest")
+    response = session.get(f"{API_URL}/latest")
     assert response.json()["latest"] == 4
 
 
 def test_follow_user():
     session = create_new_session()
     username = "aa"
-    url = f"{BASE_URL}/fllws/{username}"
+    url = f"{API_URL}/fllws/{username}"
     data = {"follow": "bb"}
     params = {"latest": 7}
     response = session.post(url, data=json.dumps(data), params=params)
@@ -221,14 +223,14 @@ def test_follow_user():
     assert "cc" in json_data["follows"]
 
     # verify that latest was updated
-    response = session.get(f"{BASE_URL}/latest")
+    response = session.get(f"{API_URL}/latest")
     assert response.json()["latest"] == 9
 
 
 def test_a_unfollows_b():
     session = create_new_session()
     username = "aa"
-    url = f"{BASE_URL}/fllws/{username}"
+    url = f"{API_URL}/fllws/{username}"
 
     #  first send unfollow command
     data = {"unfollow": "bb"}
@@ -243,7 +245,7 @@ def test_a_unfollows_b():
     assert "bb" not in response.json()["follows"]
 
     # verify that latest was updated
-    response = session.get(f"{BASE_URL}/latest")
+    response = session.get(f"{API_URL}/latest")
     assert response.json()["latest"] == 11
 
 
@@ -251,7 +253,7 @@ def test_cleaning_the_db():
     session = create_new_session()
     username = "aa"
     query = {"no": 20, "latest": 3}
-    url = f"{BASE_URL}/msgs/{username}"
+    url = f"{API_URL}/msgs/{username}"
     response = session.get(url, params=query)
     assert response.status_code == 200
 

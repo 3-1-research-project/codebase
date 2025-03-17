@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.firefox.options import Options
 
 from helpers.postgres_helper import DATABASE_URL
+from helpers.test_helper import BASE_URL
 
 # Updated to match API test file settings
 USERNAME = "simulator"
@@ -33,7 +34,7 @@ def get_text_from_first_li(driver):
 
 
 def _register_user_via_gui(driver, data):
-    register_url = "http://localhost:5000/register"
+    register_url = f"{BASE_URL}/register"
     driver.get(register_url)
 
     wait = WebDriverWait(driver, 15)
@@ -51,7 +52,7 @@ def _register_user_via_gui(driver, data):
 
 
 def _login_user_via_gui(driver, username, password):
-    login_url = "http://localhost:5000/login"
+    login_url = f"{BASE_URL}/login"
     driver.get(login_url)
 
     wait = WebDriverWait(driver, 15)
@@ -71,7 +72,7 @@ def _login_user_via_gui(driver, username, password):
 
 
 def _logout_user_via_gui(driver):
-    logout_url = "http://localhost:5000/logout"
+    logout_url = f"{BASE_URL}/logout"
     driver.get(logout_url)
 
     get_text_from_first_li(driver)

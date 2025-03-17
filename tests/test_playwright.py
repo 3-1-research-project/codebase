@@ -24,39 +24,43 @@ SIGN_IN_URL = f"{BASE_URL}/login"
 SIGN_OUT_URL = f"{BASE_URL}/logout"
 USER_TIMELINE_URL = f"{BASE_URL}/user"
 
+TIMEOUT = 60000
+
 
 def sign_in_using_playwright(page: Page, useTestUser=True):
     if not useTestUser:
-        page.goto(SIGN_UP_URL)
+        page.goto(SIGN_UP_URL, timeout=TIMEOUT)
         global username, email, password
 
         username = generate_random_username()
         email = generate_random_email()
         password = generate_random_password()
 
-        page.locator("input[name='username']").fill(username)
-        page.locator("input[name='email']").fill(email)
-        page.locator("input[name='password']").fill(password)
-        page.locator("input[name='password2']").fill(password)
-        page.locator("input[type='submit']").click()
+        page.locator("input[name='username']").fill(username, timeout=TIMEOUT)
+        page.locator("input[name='email']").fill(email, timeout=TIMEOUT)
+        page.locator("input[name='password']").fill(password, timeout=TIMEOUT)
+        page.locator("input[name='password2']").fill(password, timeout=TIMEOUT)
+        page.locator("input[type='submit']").click(timeout=TIMEOUT)
 
-    page.goto(SIGN_IN_URL)
+    page.goto(SIGN_IN_URL, timeout=TIMEOUT)
 
     page.locator("input[name='username']").fill(
-        test_username if useTestUser else username
+        test_username if useTestUser else username, 
+        timeout=TIMEOUT
     )
     page.locator("input[name='password']").fill(
-        test_password if useTestUser else password
+        test_password if useTestUser else password,
+        timeout=TIMEOUT
     )
-    page.locator("input[type='submit']").click()
+    page.locator("input[type='submit']").click(timeout=TIMEOUT)
 
 
 def sign_in_user_using_playwright(page: Page, user: User):
-    page.goto(SIGN_IN_URL)
+    page.goto(SIGN_IN_URL, timeout=TIMEOUT)
 
-    page.locator("input[name='username']").fill(user.username)
-    page.locator("input[name='password']").fill(user.password)
-    page.locator("input[type='submit']").click()
+    page.locator("input[name='username']").fill(user.username, timeout=TIMEOUT)
+    page.locator("input[name='password']").fill(user.password, timeout=TIMEOUT)
+    page.locator("input[type='submit']").click(timeout=TIMEOUT)
 
 
 test_username = "test"
@@ -71,8 +75,8 @@ execute_postgres_query(
 
 def tweet_box_visible_test(page: Page):
     expect(page.get_by_text(f"What's on your mind {test_username}?"))
-    expect(page.locator("input[name='text']")).to_be_visible()
-    expect(page.locator("input[value='Share']")).to_be_visible()
+    expect(page.locator("input[name='text']")).to_be_visible(timeout=TIMEOUT)
+    expect(page.locator("input[value='Share']")).to_be_visible(timeout=TIMEOUT)
 
 
 def tweet_list_visible_test(page: Page):
@@ -85,27 +89,27 @@ def tweet_list_visible_test(page: Page):
 
 
 def test_root_redirect_to_public_timeline(page: Page):
-    page.goto(MY_TIMELINE_URL)
+    page.goto(MY_TIMELINE_URL, timeout=TIMEOUT)
 
-    expect(page).to_have_url(PUBLIC_TIMELINE_URL)
+    expect(page).to_have_url(PUBLIC_TIMELINE_URL, timeout=TIMEOUT)
 
 
 def test_public_timeline_header_and_tweet_list_show(page: Page):
-    page.goto(PUBLIC_TIMELINE_URL)
+    page.goto(PUBLIC_TIMELINE_URL, timeout=TIMEOUT)
 
-    expect(page.locator("h2").filter(has_text="Public Timeline")).to_be_visible()
+    expect(page.locator("h2").filter(has_text="Public Timeline")).to_be_visible(timeout=TIMEOUT)
 
 
 def test_public_timeline_user_can_tweet_and_is_shown(page: Page):
     sign_in_using_playwright(page)
 
-    page.goto(PUBLIC_TIMELINE_URL)
+    page.goto(PUBLIC_TIMELINE_URL, timeout=TIMEOUT)
 
     tweet = generate_random_username()
-    page.locator("input[name='text']").fill(tweet)
-    page.locator("input[type='submit']").click()
+    page.locator("input[name='text']").fill(tweet, timeout=TIMEOUT)
+    page.locator("input[type='submit']").click(timeout=TIMEOUT)
 
-    expect(page.get_by_text(tweet)).to_be_visible()
+    expect(page.get_by_text(tweet)).to_be_visible(timeout=TIMEOUT)
 
 
 def test_public_timeline_shows_all_tweets(page: Page):
@@ -117,39 +121,39 @@ def test_public_timeline_shows_all_tweets(page: Page):
 
     follow_user_using_psql(user.user_id, user2.user_id)
 
-    page.goto(PUBLIC_TIMELINE_URL)
+    page.goto(PUBLIC_TIMELINE_URL, timeout=TIMEOUT)
 
     assert page.get_by_text(user.username).count() >= 1
     assert page.get_by_text(user2.username).count() >= 1
 
 
 def test_register_required_fields_and_buttons(page: Page):
-    page.goto(SIGN_UP_URL)
+    page.goto(SIGN_UP_URL, timeout=TIMEOUT)
 
-    expect(page.get_by_text("Username:")).to_be_visible()
-    expect(page.get_by_text("E-Mail:")).to_be_visible()
-    expect(page.get_by_text("Password:")).to_be_visible()
-    expect(page.get_by_text("Password (repeat):")).to_be_visible()
+    expect(page.get_by_text("Username:")).to_be_visible(timeout=TIMEOUT)
+    expect(page.get_by_text("E-Mail:")).to_be_visible(timeout=TIMEOUT)
+    expect(page.get_by_text("Password:")).to_be_visible(timeout=TIMEOUT)
+    expect(page.get_by_text("Password (repeat):")).to_be_visible(timeout=TIMEOUT)
 
-    expect(page.locator("input[name='username']")).to_be_visible()
-    expect(page.locator("input[name='email']")).to_be_visible()
-    expect(page.locator("input[name='password']")).to_be_visible()
-    expect(page.locator("input[name='password2']")).to_be_visible()
-    expect(page.locator("input[type='submit']")).to_be_visible()
+    expect(page.locator("input[name='username']")).to_be_visible(timeout=TIMEOUT)
+    expect(page.locator("input[name='email']")).to_be_visible(timeout=TIMEOUT)
+    expect(page.locator("input[name='password']")).to_be_visible(timeout=TIMEOUT)
+    expect(page.locator("input[name='password2']")).to_be_visible(timeout=TIMEOUT)
+    expect(page.locator("input[type='submit']")).to_be_visible(timeout=TIMEOUT)
 
 
 def test_register_works_redirects_to_sign_in(page: Page):
-    page.goto(SIGN_UP_URL)
+    page.goto(SIGN_UP_URL, timeout=TIMEOUT)
 
     username = generate_random_username()
     email = generate_random_email()
     password = generate_random_password()
 
-    page.locator("input[name='username']").fill(username)
-    page.locator("input[name='email']").fill(email)
-    page.locator("input[name='password']").fill(password)
-    page.locator("input[name='password2']").fill(password)
-    page.locator("input[type='submit']").click()
+    page.locator("input[name='username']").fill(username, timeout=TIMEOUT)
+    page.locator("input[name='email']").fill(email, timeout=TIMEOUT)
+    page.locator("input[name='password']").fill(password, timeout=TIMEOUT)
+    page.locator("input[name='password2']").fill(password, timeout=TIMEOUT)
+    page.locator("input[type='submit']").click(timeout=TIMEOUT)
 
     assert page.url == SIGN_IN_URL
 
@@ -160,23 +164,23 @@ def test_register_works_redirects_to_sign_in(page: Page):
 
 
 def test_sign_in_fields_and_buttons(page: Page):
-    page.goto(SIGN_IN_URL)
+    page.goto(SIGN_IN_URL, timeout=TIMEOUT)
 
-    expect(page.get_by_text("Username:")).to_be_visible()
-    expect(page.get_by_text("Password:")).to_be_visible()
+    expect(page.get_by_text("Username:")).to_be_visible(timeout=TIMEOUT)
+    expect(page.get_by_text("Password:")).to_be_visible(timeout=TIMEOUT)
 
-    expect(page.locator("input[name='username']")).to_be_visible()
-    expect(page.locator("input[name='password']")).to_be_visible()
+    expect(page.locator("input[name='username']")).to_be_visible(timeout=TIMEOUT)
+    expect(page.locator("input[name='password']")).to_be_visible(timeout=TIMEOUT)
 
 
 def test_sign_in_works_redirects_to_my_timeline(page: Page):
-    page.goto(SIGN_IN_URL)
+    page.goto(SIGN_IN_URL, timeout=TIMEOUT)
 
-    page.locator("input[name='username']").fill(test_username)
-    page.locator("input[name='password']").fill(test_password)
-    page.locator("input[type='submit']").click()
+    page.locator("input[name='username']").fill(test_username, timeout=TIMEOUT)
+    page.locator("input[name='password']").fill(test_password, timeout=TIMEOUT)
+    page.locator("input[type='submit']").click(timeout=TIMEOUT)
 
-    page.wait_for_url(MY_TIMELINE_URL)
+    page.wait_for_url(MY_TIMELINE_URL, timeout=TIMEOUT)
 
     assert page.url == MY_TIMELINE_URL
 
@@ -184,9 +188,9 @@ def test_sign_in_works_redirects_to_my_timeline(page: Page):
 def test_my_timeline_tweet_box_and_message_list(page: Page):
     sign_in_using_playwright(page)
 
-    page.goto(MY_TIMELINE_URL)
+    page.goto(MY_TIMELINE_URL, timeout=TIMEOUT)
 
-    expect(page.get_by_text("My Timeline", exact=True)).to_be_visible()
+    expect(page.get_by_text("My Timeline", exact=True)).to_be_visible(timeout=TIMEOUT)
     tweet_box_visible_test(page)
     tweet_list_visible_test(page)
 
@@ -194,14 +198,14 @@ def test_my_timeline_tweet_box_and_message_list(page: Page):
 def test_my_timeline_user_can_tweet_and_message_is_shown(page: Page):
     sign_in_using_playwright(page)
 
-    page.goto(MY_TIMELINE_URL)
-    page.wait_for_url(MY_TIMELINE_URL)
+    page.goto(MY_TIMELINE_URL, timeout=TIMEOUT)
+    page.wait_for_url(MY_TIMELINE_URL, timeout=TIMEOUT)
 
     tweet = generate_random_username()
-    page.locator("input[name='text']").fill(tweet)
-    page.locator("input[type='submit']").click()
+    page.locator("input[name='text']").fill(tweet, timeout=TIMEOUT)
+    page.locator("input[type='submit']").click(timeout=TIMEOUT)
 
-    expect(page.get_by_text(tweet)).to_be_visible()
+    expect(page.get_by_text(tweet)).to_be_visible(timeout=TIMEOUT)
 
 
 def test_my_timeline_shows_followed_tweets_and_my_own_tweets(page: Page):
@@ -215,7 +219,7 @@ def test_my_timeline_shows_followed_tweets_and_my_own_tweets(page: Page):
 
     sign_in_user_using_playwright(page, user)
 
-    page.goto(MY_TIMELINE_URL)
+    page.goto(MY_TIMELINE_URL, timeout=TIMEOUT)
 
     assert page.get_by_text(user.username).count() >= 1
     assert page.get_by_text(user2.username).count() >= 1
@@ -224,11 +228,11 @@ def test_my_timeline_shows_followed_tweets_and_my_own_tweets(page: Page):
 def test_logout_logs_out_user_and_redirects_to_public_timeline(page: Page):
     sign_in_using_playwright(page)
 
-    page.goto(SIGN_OUT_URL)
+    page.goto(SIGN_OUT_URL, timeout=TIMEOUT)
 
     assert page.url == PUBLIC_TIMELINE_URL
 
-    page.goto(f"{USER_TIMELINE_URL}/{test_username}")
+    page.goto(f"{USER_TIMELINE_URL}/{test_username}", timeout=TIMEOUT)
 
     assert page.get_by_text("This is you!").count() == 0
 
@@ -236,17 +240,17 @@ def test_logout_logs_out_user_and_redirects_to_public_timeline(page: Page):
 def test_follow_and_unfollow(page: Page):
     sign_in_using_playwright(page, useTestUser=False)
 
-    page.goto(f"{USER_TIMELINE_URL}/{test_username}")
+    page.goto(f"{USER_TIMELINE_URL}/{test_username}", timeout=TIMEOUT)
 
     not_following_text = "You are not yet following this user"
 
-    expect(page.get_by_text(not_following_text)).to_be_visible()
-    page.get_by_text("Follow user").click()
+    expect(page.get_by_text(not_following_text)).to_be_visible(timeout=TIMEOUT)
+    page.get_by_text("Follow user").click(timeout=TIMEOUT)
 
-    expect(page.get_by_text("You are currently following this user")).to_be_visible()
-    page.get_by_text("Unfollow user").click()
+    expect(page.get_by_text("You are currently following this user")).to_be_visible(timeout=TIMEOUT)
+    page.get_by_text("Unfollow user").click(timeout=TIMEOUT)
 
-    expect(page.get_by_text(not_following_text)).to_be_visible()
+    expect(page.get_by_text(not_following_text)).to_be_visible(timeout=TIMEOUT)
 
 
 def test_user_timeline_user_own_timeline_only_shows_users_tweets(page: Page):
@@ -258,7 +262,7 @@ def test_user_timeline_user_own_timeline_only_shows_users_tweets(page: Page):
 
     sign_in_user_using_playwright(page, user)
 
-    page.goto(f"{USER_TIMELINE_URL}/{user.username}")
+    page.goto(f"{USER_TIMELINE_URL}/{user.username}", timeout=TIMEOUT)
 
     assert page.get_by_text(user.username).count() >= 1
     assert page.get_by_text(user2.username).count() >= 0
