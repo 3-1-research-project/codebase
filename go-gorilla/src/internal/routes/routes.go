@@ -21,6 +21,7 @@ func SetupRouting() template.FuncMap {
 			return helpers.Format_datetime(timestamp)
 		},
 		"url_for": func(routename, username string) string {
+			// print("routes line 24, routename: " + routename + ", username: " + username + ".\n ")
 			switch routename {
 			case "unfollow":
 				return "/" + username + "/unfollow"
@@ -28,10 +29,13 @@ func SetupRouting() template.FuncMap {
 				return "/" + username + "/follow"
 			case "add_message":
 				return "/add_message"
-			case "timeline":
-				return "/user/" + username
+			case "my_timeline":
+				// print("routes line 32, username: " + username)
+				return "/" // user/" + username
 			case "public_timeline":
 				return "/public"
+			case "user_timeline":
+				return "/user/" + username
 			case "logout":
 				return "/logout"
 			case "login":
@@ -67,6 +71,7 @@ func SetRouteHandlers(r *mux.Router) {
 	r.HandleFunc("/", handlers.MyTimeline)
 	r.HandleFunc("/add_message", handlers.Add_message).Methods("POST")
 	r.HandleFunc("/{username}/follow", handlers.Follow_user)
+	// print("routes line 71")
 	r.HandleFunc("/user/{username}", handlers.User_timeline)
 	r.HandleFunc("/{username}/unfollow", handlers.Unfollow_user)
 

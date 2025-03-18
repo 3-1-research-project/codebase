@@ -1,10 +1,22 @@
 FROM mcr.microsoft.com/devcontainers/base:jammy
 
+WORKDIR /app
+
+# Update package lists and install dependencies in a single RUN command
 RUN apt-get update \
     && apt install \
         python3 \
         python3-pip \
         libpq-dev \
-        -y
+        -y \
+        golang \
+    && rm -rf /var/lib/apt/lists/*
 
+# Copy Go module files
+# COPY go-gorilla/go.mod go-gorilla/go.sum ./
+
+# Download and verify Go modules
+# RUN go mod download && go mod verify
+
+# Keep container running (for debugging)
 CMD sleep infinity
