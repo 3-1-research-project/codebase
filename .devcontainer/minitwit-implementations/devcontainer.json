@@ -1,0 +1,18 @@
+{
+	"name": "minitwit-implementations",
+	"dockerComposeFile": [
+		"./compose.yaml"
+	],
+	"service": "minitwit-implementations",
+	"workspaceFolder": "/workspaces/",
+	"postCreateCommand": "bash .devcontainer/minitwit-implementations/post-create.sh",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.black-formatter",
+				"ms-python.debugpy",
+				"ms-python.python"
+			]
+		}
+	}
+}
