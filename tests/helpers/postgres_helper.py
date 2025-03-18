@@ -1,7 +1,7 @@
-from collections import namedtuple
 from datetime import datetime
 import os
 import string
+from typing import Optional, NamedTuple
 
 import psycopg2
 
@@ -13,7 +13,11 @@ from helpers.test_helper import (
 
 DATABASE_URL = os.environ["DATABASE_URL"]
 
-User = namedtuple("User", ["user_id", "username", "email", "password"])
+class User(NamedTuple):
+    username: str
+    email: str
+    password: str
+    user_id: Optional[int] = None
 
 
 def fetch_postgres_query(query: string):
