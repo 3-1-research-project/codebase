@@ -4,6 +4,7 @@ import pytest
 from playwright.sync_api import Page, expect
 from helpers.postgres_helper import (
     User,
+    clean_database,
     create_user_using_psql,
     execute_postgres_query,
     fetch_postgres_query,
@@ -24,6 +25,7 @@ SIGN_IN_URL = f"{BASE_URL}/login"
 SIGN_OUT_URL = f"{BASE_URL}/logout"
 USER_TIMELINE_URL = f"{BASE_URL}/user"
 
+
 def sign_in_using_playwright(page: Page, useTestUser=True):
     if not useTestUser:
         page.goto(SIGN_UP_URL)
@@ -42,12 +44,10 @@ def sign_in_using_playwright(page: Page, useTestUser=True):
     page.goto(SIGN_IN_URL)
 
     page.locator("input[name='username']").fill(
-        test_username if useTestUser else username, 
-        
+        test_username if useTestUser else username,
     )
     page.locator("input[name='password']").fill(
         test_password if useTestUser else password,
-        
     )
     page.locator("input[type='submit']").click()
 
@@ -64,10 +64,13 @@ test_username = "test"
 test_email = "test@test.test"
 test_password = "test"
 
-execute_postgres_query("truncate table users, followers, messages, latest;")
-execute_postgres_query(
-    f"do $$ begin IF NOT EXISTS (SELECT 1 FROM users WHERE username = '{test_username}') THEN INSERT INTO users (username, email, pw_hash) VALUES ('{test_username}', '{test_email}', '{test_password}'); END IF; end $$;"
-)
+
+@pytest.fixture(scope="session", autouse=True)
+def setup():
+    clean_database()
+    execute_postgres_query(
+        f"do $$ begin IF NOT EXISTS (SELECT 1 FROM users WHERE username = '{test_username}') THEN INSERT INTO users (username, email, pw_hash) VALUES ('{test_username}', '{test_email}', '{test_password}'); END IF; end $$;"
+    )
 
 
 def tweet_box_visible_test(page: Page):
