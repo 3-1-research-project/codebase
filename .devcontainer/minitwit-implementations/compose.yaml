@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  minitwit-implementations:
+    image: minitwit-implementations
+    build: .
+    container_name: minitwit-implementations
+    volumes:
+      - ../..:/workspaces:cached
+    environment:
+      - DATABASE_URL=postgresql://postgres:1234@postgres-implementations:5432/postgres
+      - BASE_URL=http://localhost:5000
+      - SECRET_KEY=waectsk
+
+  postgres-implementations:
+    image: postgres:17
+    container_name: postgres-implementations
+    hostname: postgres-implementations
+    environment:
+      - POSTGRES_PASSWORD=1234 
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5432:5432
+    volumes:
+      - ../../database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
