@@ -28,10 +28,12 @@ func SetupRouting() template.FuncMap {
 				return "/" + username + "/follow"
 			case "add_message":
 				return "/add_message"
-			case "timeline":
-				return "/user/" + username
+			case "my_timeline":
+				return "/" 
 			case "public_timeline":
 				return "/public"
+			case "user_timeline":
+				return "/user/" + username
 			case "logout":
 				return "/logout"
 			case "login":
