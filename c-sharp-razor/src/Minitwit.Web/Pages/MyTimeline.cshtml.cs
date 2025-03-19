@@ -35,8 +35,13 @@ public class MyTimelineModel : PageModel
         _signInManager = signInManager;
     }
     
-    public async Task<ActionResult> OnGet()
+    public async Task<ActionResult> OnGetAsync()
     {   
+        if (!_signInManager.IsSignedIn(User))
+        {
+            return Redirect("/public");
+        }
+        
         await InitializeVariables();
         return Page();
     }
@@ -112,9 +117,4 @@ public class MyTimelineModel : PageModel
             Messages = new List<MessageViewModel>();
         }
     }
-}
-
-public class NewMessage
-{
-    public string? Text { get; set; }
 }

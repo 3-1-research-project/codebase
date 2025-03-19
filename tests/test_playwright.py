@@ -1,15 +1,18 @@
+import json
 import os
 import pytest
 
 from playwright.sync_api import Page, expect
 from helpers.postgres_helper import (
     User,
+    clean_database,
     create_user_using_psql,
     execute_postgres_query,
     fetch_postgres_query,
     follow_user_using_psql,
     tweet_using_psql,
 )
+from helpers.session_helper import create_new_session
 from helpers.test_helper import (
     BASE_URL,
     generate_random_email,
@@ -24,6 +27,9 @@ SIGN_IN_URL = f"{BASE_URL}/login"
 SIGN_OUT_URL = f"{BASE_URL}/logout"
 USER_TIMELINE_URL = f"{BASE_URL}/user"
 
+API_URL = f"{BASE_URL}/api"
+
+
 def sign_in_using_playwright(page: Page, useTestUser=True):
     if not useTestUser:
         page.goto(SIGN_UP_URL)
@@ -33,41 +39,75 @@ def sign_in_using_playwright(page: Page, useTestUser=True):
         email = generate_random_email()
         password = generate_random_password()
 
-        page.locator("input[name='username']").fill(username)
-        page.locator("input[name='email']").fill(email)
-        page.locator("input[name='password']").fill(password)
-        page.locator("input[name='password2']").fill(password)
-        page.locator("input[type='submit']").click()
+        page.locator("input[name='username' i]").fill(username)
+        page.locator("input[name='email' i]").fill(email)
+        page.locator("input[name='password' i]").fill(password)
+        page.locator("input[name='password2' i]").fill(password)
+        page.locator("input[type='submit' i]").click()
 
     page.goto(SIGN_IN_URL)
 
-    page.locator("input[name='username']").fill(
-        test_username if useTestUser else username, 
-        
+    page.locator("input[name='username' i]").fill(
+        test_username if useTestUser else username,
     )
-    page.locator("input[name='password']").fill(
+    page.locator("input[name='password' i]").fill(
         test_password if useTestUser else password,
-        
     )
-    page.locator("input[type='submit']").click()
+    page.locator("input[type='submit' i]").click()
 
 
 def sign_in_user_using_playwright(page: Page, user: User):
     page.goto(SIGN_IN_URL)
 
-    page.locator("input[name='username']").fill(user.username)
-    page.locator("input[name='password']").fill(user.password)
-    page.locator("input[type='submit']").click()
+    page.locator("input[name='username' i]").fill(user.username)
+    page.locator("input[name='password' i]").fill(user.password)
+    page.locator("input[type='submit' i]").click()
+
+
+def create_user_using_api(user: User):
+    session = create_new_session()
+
+    data = {"username": user.username, "email": user.email, "pwd": user.password}
+    params = {"latest": 1}
+
+    response = session.post(f"{API_URL}/register", data=json.dumps(data), params=params)
+
+    assert response.ok
+
+def tweet_using_api(user: User):
+    session = create_new_session()
+    
+    data = {"content": generate_random_username()}
+    url = f"{API_URL}/msgs/{user.username}"
+    params = {"latest": 1}
+
+    response = session.post(url, data=json.dumps(data), params=params)
+
+    assert response.ok
+
+
+def follow_user_using_api(user: User, other_user: User):
+    session = create_new_session()
+
+    url = f"{API_URL}/fllws/{user.username}"
+    data = {"follow": other_user.username}
+    params = {"latest": 1}
+
+    response = session.post(url, data=json.dumps(data), params=params)
+
+    assert response.ok
 
 
 test_username = "test"
 test_email = "test@test.test"
 test_password = "test"
 
-execute_postgres_query("truncate table users, followers, messages;")
-execute_postgres_query(
-    f"do $$ begin IF NOT EXISTS (SELECT 1 FROM users WHERE username = '{test_username}') THEN INSERT INTO users (username, email, pw_hash) VALUES ('{test_username}', '{test_email}', '{test_password}'); END IF; end $$;"
-)
+
+@pytest.fixture(scope="session", autouse=True)
+def setup():
+    clean_database()
+
+    create_user_using_api(User(username=test_username, email=test_email, password=test_password))
 
 
 def tweet_box_visible_test(page: Page):
@@ -103,8 +143,8 @@ def test_public_timeline_user_can_tweet_and_is_shown(page: Page):
     page.goto(PUBLIC_TIMELINE_URL)
 
     tweet = generate_random_username()
-    page.locator("input[name='text']").fill(tweet)
-    page.locator("input[type='submit']").click()
+    page.locator("input[name='text' i]").fill(tweet)
+    page.locator("input[type='submit' i]").click()
 
     expect(page.get_by_text(tweet)).to_be_visible()
     
@@ -136,11 +176,11 @@ def test_register_required_fields_and_buttons(page: Page):
     expect(page.get_by_text("Password:")).to_be_visible()
     expect(page.get_by_text("Password (repeat):")).to_be_visible()
 
-    expect(page.locator("input[name='username']")).to_be_visible()
-    expect(page.locator("input[name='email']")).to_be_visible()
-    expect(page.locator("input[name='password']")).to_be_visible()
-    expect(page.locator("input[name='password2']")).to_be_visible()
-    expect(page.locator("input[type='submit']")).to_be_visible()
+    expect(page.locator("input[name='username' i]")).to_be_visible()
+    expect(page.locator("input[name='email' i]")).to_be_visible()
+    expect(page.locator("input[name='password' i]")).to_be_visible()
+    expect(page.locator("input[name='password2' i]")).to_be_visible()
+    expect(page.locator("input[type='submit' i]")).to_be_visible()
 
 
 def test_register_works_redirects_to_sign_in(page: Page):
@@ -150,17 +190,18 @@ def test_register_works_redirects_to_sign_in(page: Page):
     email = generate_random_email()
     password = generate_random_password()
 
-    page.locator("input[name='username']").fill(username)
-    page.locator("input[name='email']").fill(email)
-    page.locator("input[name='password']").fill(password)
-    page.locator("input[name='password2']").fill(password)
-    page.locator("input[type='submit']").click()
+    page.locator("input[name='username' i]").fill(username)
+    page.locator("input[name='email' i]").fill(email)
+    page.locator("input[name='password' i]").fill(password)
+    page.locator("input[name='password2' i]").fill(password)
+    page.locator("input[type='submit' i]").click()
 
     assert page.url == SIGN_IN_URL
 
     does_user_exist_in_db = fetch_postgres_query(
         f"SELECT count(*) FROM users WHERE username = '{username}'"
     )
+
     assert does_user_exist_in_db[0][0] == 1
 
 
@@ -170,16 +211,16 @@ def test_sign_in_fields_and_buttons(page: Page):
     expect(page.get_by_text("Username:")).to_be_visible()
     expect(page.get_by_text("Password:")).to_be_visible()
 
-    expect(page.locator("input[name='username']")).to_be_visible()
-    expect(page.locator("input[name='password']")).to_be_visible()
+    expect(page.locator("input[name='username' i]")).to_be_visible()
+    expect(page.locator("input[name='password' i]")).to_be_visible()
 
 
 def test_sign_in_works_redirects_to_my_timeline(page: Page):
     page.goto(SIGN_IN_URL)
 
-    page.locator("input[name='username']").fill(test_username)
-    page.locator("input[name='password']").fill(test_password)
-    page.locator("input[type='submit']").click()
+    page.locator("input[name='username' i]").fill(test_username)
+    page.locator("input[name='password' i]").fill(test_password)
+    page.locator("input[type='submit' i]").click()
 
     page.wait_for_url(MY_TIMELINE_URL)
 
@@ -214,13 +255,16 @@ def test_my_timeline_user_can_tweet_and_message_is_shown(page: Page):
 
 
 def test_my_timeline_shows_followed_tweets_and_my_own_tweets(page: Page):
-    user = create_user_using_psql()
-    user2 = create_user_using_psql()
+    user = User(username=generate_random_username(), email=generate_random_email(), password=generate_random_password())
+    user2 = User(username=generate_random_username(), email=generate_random_email(), password=generate_random_password())
 
-    tweet_using_psql(user.user_id)
-    tweet_using_psql(user2.user_id)
+    create_user_using_api(user)
+    create_user_using_api(user2)
 
-    follow_user_using_psql(user.user_id, user2.user_id)
+    tweet_using_api(user)
+    tweet_using_api(user2)
+
+    follow_user_using_api(user, user2)
 
     sign_in_user_using_playwright(page, user)
 

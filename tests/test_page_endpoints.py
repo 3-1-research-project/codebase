@@ -20,8 +20,6 @@ HEADERS = {
     "Authorization": f"Basic {ENCODED_CREDENTIALS}",
 }
 
-# Get the database URL from the environment variable
-
 
 def get_text_from_first_li(driver):
     try:
