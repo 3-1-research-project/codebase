@@ -147,6 +147,10 @@ def test_public_timeline_user_can_tweet_and_is_shown(page: Page):
     page.locator("input[type='submit' i]").click()
 
     expect(page.get_by_text(tweet)).to_be_visible()
+    
+    page.wait_for_url(PUBLIC_TIMELINE_URL)
+    
+    assert page.url == PUBLIC_TIMELINE_URL
 
 
 def test_public_timeline_shows_all_tweets(page: Page):
@@ -244,6 +248,10 @@ def test_my_timeline_user_can_tweet_and_message_is_shown(page: Page):
     page.locator("input[type='submit']").click()
 
     expect(page.get_by_text(tweet)).to_be_visible()
+    
+    page.wait_for_url(MY_TIMELINE_URL)
+
+    assert page.url == MY_TIMELINE_URL
 
 
 def test_my_timeline_shows_followed_tweets_and_my_own_tweets(page: Page):

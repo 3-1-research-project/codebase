@@ -1,11 +1,16 @@
 FROM mcr.microsoft.com/devcontainers/base:jammy
 
+WORKDIR /app
+
+# Update package lists and install dependencies in a single RUN command
 RUN apt-get update \
     && apt install \
         python3 \
         python3-pip \
         libpq-dev \
-        -y
+        golang \
+        -y \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install node
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash \
@@ -20,4 +25,5 @@ RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-p
 RUN apt-get update \ 
     && apt-get install -y dotnet-sdk-8.0
 
+# Keep container running (for debugging)
 CMD sleep infinity
