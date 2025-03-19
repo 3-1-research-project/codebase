@@ -21,7 +21,6 @@ func SetupRouting() template.FuncMap {
 			return helpers.Format_datetime(timestamp)
 		},
 		"url_for": func(routename, username string) string {
-			// print("routes line 24, routename: " + routename + ", username: " + username + ".\n ")
 			switch routename {
 			case "unfollow":
 				return "/" + username + "/unfollow"
