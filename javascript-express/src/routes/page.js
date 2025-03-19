@@ -187,7 +187,7 @@ router.post('/add_message', async (req, res) => {
     if (!text) {
         req.flash('success', 'Message cannot be empty!'); // minimal effort maximum result ¯\_(ツ)_/¯
 
-        return res.redirect('/');
+        return res.redirect('back');
     }
 
     const success = await createMessage(user.user_id, text);
@@ -195,7 +195,7 @@ router.post('/add_message', async (req, res) => {
     if (success) {
         req.flash('success', 'Your message was recorded');
 
-        res.redirect('/');
+        res.redirect('back');
     } else {
         res.status(500).send('Internal Server Error');
     }
