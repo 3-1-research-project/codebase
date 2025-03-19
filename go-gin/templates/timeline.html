@@ -14,7 +14,7 @@ content will be inserted */}} {{template "layout.html" .}} {{define "Title"}}
 	{{else}} You are not yet following this user.
 	<a class="follow" href="/{{.ProfileUserName}}/follow">Follow user</a>. {{end}}
 </div>
-{{else if eq .Endpoint "my_timeline"}}
+{{else if or (eq .Endpoint "my_timeline") (eq .Endpoint "public_timeline")}}
 <div class="twitbox">
 	<h3>What's on your mind {{.UserName}}?</h3>
 	<form action="/add_message" method="post">
