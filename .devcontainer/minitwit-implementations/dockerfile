@@ -9,8 +9,13 @@ RUN apt-get update \
         python3-pip \
         libpq-dev \
         golang \
+        ruby \
+        ruby-dev \
         -y \
     && rm -rf /var/lib/apt/lists/*
+
+# Setup ruby
+RUN gem install bundler
 
 # Install node
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash \
@@ -24,6 +29,8 @@ RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-p
 
 RUN apt-get update \ 
     && apt-get install -y dotnet-sdk-8.0
+
+EXPOSE 5000:5000
 
 # Keep container running (for debugging)
 CMD sleep infinity
