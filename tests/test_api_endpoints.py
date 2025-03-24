@@ -4,7 +4,7 @@ import base64
 import psycopg2
 import requests
 
-from helpers.postgres_helper import DATABASE_URL
+from helpers.postgres_helper import DATABASE_URL, clean_database
 from helpers.test_helper import BASE_URL
 
 API_URL = f"{BASE_URL}/api"
@@ -18,42 +18,6 @@ HEADERS = {
     "Content-Type": "application/json",
     f"Authorization": f"Basic {ENCODED_CREDENTIALS}",
 }
-
-
-def clean_database(truncate_all: bool = False):
-    with psycopg2.connect(DATABASE_URL) as conn:
-        with conn.cursor() as cur:
-            tables_to_truncate = [
-                "users",
-                "messages",
-                "followers",
-                "AspNetRoles",
-                "AspNetRoleClaims",
-                "AspNetUserClaims",
-                "AspNetUserLogins",
-                "AspNetUserRoles",
-                "AspNetUserTokens",
-            ]  # AspNet tables for Identity
-
-            for table in tables_to_truncate:
-                cur.execute(
-                    """
-                    SELECT EXISTS (
-                        SELECT FROM information_schema.tables
-                        WHERE table_schema = 'public'
-                        AND table_name = %s
-                    );
-                """,
-                    (table,),
-                )
-
-                exists = cur.fetchone()[0]
-
-                if exists:
-                    cur.execute(f'TRUNCATE TABLE "{table}" CASCADE;')
-                    print(f"Table {table} truncated")
-
-            conn.commit()
 
 
 def create_new_session():
@@ -84,9 +48,7 @@ def test_register():
     pwd = "a"
     data = {"username": username, "email": email, "pwd": pwd}
     params = {"latest": 1}
-    response = session.post(
-        f"{API_URL}/register", data=json.dumps(data), params=params
-    )
+    response = session.post(f"{API_URL}/register", data=json.dumps(data), params=params)
     assert response.ok
     # TODO: add another assertion that it is really there
 
@@ -102,9 +64,7 @@ def test_register_b():
     pwd = "b"
     data = {"username": username, "email": email, "pwd": pwd}
     params = {"latest": 5}
-    response = session.post(
-        f"{API_URL}/register", data=json.dumps(data), params=params
-    )
+    response = session.post(f"{API_URL}/register", data=json.dumps(data), params=params)
     assert response.ok
     # TODO: add another assertion that it is really there
 
@@ -120,9 +80,7 @@ def test_register_c():
     pwd = "c"
     data = {"username": username, "email": email, "pwd": pwd}
     params = {"latest": 6}
-    response = session.post(
-        f"{API_URL}/register", data=json.dumps(data), params=params
-    )
+    response = session.post(f"{API_URL}/register", data=json.dumps(data), params=params)
     assert response.ok
 
     # verify that latest was updated

@@ -23,7 +23,20 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | b
     && ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/npm" /usr/local/bin/npm \
     && ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/npx" /usr/local/bin/npx
     
+# Install node
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash \
+    && \. "$HOME/.nvm/nvm.sh" \
+    && nvm install 22
+
+# Install .NET SDK
+RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
+    && sudo dpkg -i packages-microsoft-prod.deb \
+    && rm packages-microsoft-prod.deb
+
+RUN apt-get update \ 
+    && apt-get install -y dotnet-sdk-8.0
+
 EXPOSE 5000:5000
-    
+
 # Keep container running (for debugging)
 CMD sleep infinity
