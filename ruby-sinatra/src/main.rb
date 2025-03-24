@@ -164,7 +164,7 @@ post '/add_message' do
     flash[:error] = 'Something went wrong :('
   end
 
-  redirect('/')
+  redirect(request.referer)
 end
 
 get '/user/:username' do

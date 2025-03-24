@@ -13,7 +13,7 @@
     <a class=follow href="<%= "/#{@profile_user.username}/follow" %>">Follow user</a>.
   <% end %>
   </div>
-<% elsif @title == "My Timeline" %>
+<% elsif @title == "My Timeline" || (current_user. != nil && @title == "Public Timeline") %>
   <% if flash[:error] %>
     <div class=error><strong>Error:</strong><%= flash[:error] %></div>
   <% end %>

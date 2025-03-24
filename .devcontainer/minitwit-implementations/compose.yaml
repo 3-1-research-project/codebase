@@ -7,6 +7,8 @@ services:
     container_name: minitwit-implementations
     volumes:
       - ../..:/workspaces:cached
+    ports:
+      - 5000:5000
     environment:
       - DATABASE_URL=postgresql://postgres:1234@postgres-implementations:5432/postgres
       - BASE_URL=http://localhost:5000
