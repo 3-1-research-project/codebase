@@ -6,6 +6,9 @@ using Minitwit.Core.Entities;
 using Minitwit.Core.Repository;
 using Minitwit.Web;
 using Minitwit.Web.Models;
+using Minitwit.Web.Helpers;
+
+using System.Text.Json;
 
 namespace Minitwit.Razor.Pages;
 
@@ -17,15 +20,15 @@ public class UserTimelineModel : PageModel
     private readonly IAuthorRepository _authorRepository;
     private readonly SignInManager<Author> _signInManager;
     private readonly IFollowRepository _followRepository;
-    
+
     public ICollection<MessageViewModel>? Messages { get; set; }
-    
+
     public bool IsFollowing { get; set; }
 
     public required Author? user { get; set; }
 
     public Author TimelineAuthor { get; set; }
-    
+
     public required int currentPage { get; set; }
     public required int totalPages { get; set; }
 
@@ -42,9 +45,9 @@ public class UserTimelineModel : PageModel
         _authorRepository = authorRepository;
         _signInManager = signInManager;
         _followRepository = followRepository;
-        
+
     }
-    
+
     public async Task<ActionResult> OnGet(string author)
     {
         user = await _userManager.GetUserAsync(User);
@@ -66,9 +69,10 @@ public class UserTimelineModel : PageModel
         {
             await LoadMessages(null, TimelineAuthor, currentPage);
         }
+        // GCLogger.LogGarbageCollection("get user timeline");
         return Page();
     }
-    
+
     private async Task LoadMessages(Author? signedInAuthor, Author timelineAuthor, int page)
     {
         try
@@ -97,7 +101,7 @@ public class UserTimelineModel : PageModel
             Messages = new List<MessageViewModel>();
         }
     }
-    
+
     public async Task<IActionResult> OnGetFollow(string author)
     {
         var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -105,29 +109,32 @@ public class UserTimelineModel : PageModel
         {
             return Unauthorized();
         }
-        var authorToFollow = await _authorRepository.GetAuthorByNameAsync(author); 
+        var authorToFollow = await _authorRepository.GetAuthorByNameAsync(author);
         if (authorToFollow == null)
         {
             return NotFound();
         }
-        
-        await _authorRepository.AddFollowAsync(int.Parse(currentUserId), authorToFollow.Id); 
+
+        await _authorRepository.AddFollowAsync(int.Parse(currentUserId), authorToFollow.Id);
         TempData["FlashMessage"] = $"You are now following {authorToFollow.UserName}";
 
+        // GCLogger.LogGarbageCollection("follow user");
         Response.Redirect($"/user/{authorToFollow.UserName}");
         return new EmptyResult();
     }
-    
+
     public async Task<IActionResult> OnGetUnfollow(string author)
-    {   
+    {
         Author? currentUser = await _userManager.GetUserAsync(User);
         Author? authorToUnfollow = await _authorRepository.GetAuthorByNameAsync(author);
-    
+
         if (currentUser == null)
             return NotFound();
-        
+
         await _authorRepository.RemoveFollowAsync(currentUser.Id, authorToUnfollow.Id);
         TempData["FlashMessage"] = "You are no longer following " + authorToUnfollow.UserName;
+
+        // GCLogger.LogGarbageCollection("unfollow user");
         Response.Redirect($"/user/{authorToUnfollow.UserName}");
         return new EmptyResult();
     }

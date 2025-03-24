@@ -11,7 +11,12 @@
 			"extensions": [
 				"ms-python.black-formatter",
 				"ms-python.debugpy",
-				"ms-python.python"
+				"ms-python.python",
+ 				"ms-dotnettools.vscode-dotnet-runtime",
+ 				"ms-dotnettools.csdevkit",
+ 				"ms-dotnettools.csharp",
+ 				"ms-dotnettools.vscodeintellicode-csharp",
+ 				"SonarSource.sonarlint-vscode"
 			]
 		}
 	}

@@ -7,6 +7,8 @@ using Minitwit.Core.Repository;
 using Minitwit.Infrastructure;
 using Minitwit.Infrastructure.Repository;
 
+using Serilog;
+
 namespace Minitwit.Web;
 
 static class Program
@@ -15,6 +17,15 @@ static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.Console()
+            .WriteTo.File("logs/gc_debug.txt", rollingInterval: RollingInterval.Day)
+            .CreateLogger();
+
+        // builder.UseSerilog();
+
+
         // Add services to the container.
         builder.Services.AddRazorPages(options =>
         {
@@ -22,12 +33,12 @@ static class Program
             options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "/login");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/Logout", "/logout");
         });
-        
+
         builder.Services.AddMvc(options =>
         {
             options.Filters.Add(new IgnoreAntiforgeryTokenAttribute());
         });
-        
+
         ProgramOptions.AddProgramOptions(builder);
         ProgramOptions.AddIdendity(builder);
         builder.Services.Configure<IdentityOptions>(options =>
@@ -45,7 +56,7 @@ static class Program
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
                 options.JsonSerializerOptions.IgnoreNullValues = true;
             });
-        
+
         builder.Services.ConfigureApplicationCookie(options =>
         {
             options.Cookie.HttpOnly = true;
@@ -56,17 +67,17 @@ static class Program
             options.LoginPath = "/login";
             options.LogoutPath = "/logout";
         });
-        
+
         builder.Services.AddSession(options =>
         {
             options.Cookie.Name = ".Minitwit.Web.Session";
-            options.IdleTimeout = TimeSpan.FromMinutes(30); 
-            options.Cookie.HttpOnly = true; 
+            options.IdleTimeout = TimeSpan.FromMinutes(30);
+            options.Cookie.HttpOnly = true;
             options.Cookie.IsEssential = true;
-            options.Cookie.SecurePolicy = CookieSecurePolicy.None; 
-            options.Cookie.SameSite = SameSiteMode.Lax; 
+            options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+            options.Cookie.SameSite = SameSiteMode.Lax;
         });
-        
+
         // Dependency Injection
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         builder.Services.AddScoped<IValidator<CreateMessage>, MessageCreateValidator>();
@@ -87,7 +98,7 @@ static class Program
             var services = scope.ServiceProvider;
 
             try
-            {   
+            {
                 var context = services.GetRequiredService<MinitwitDbContext>();
                 context.Database.Migrate();
             }
@@ -96,7 +107,7 @@ static class Program
                 Console.WriteLine($"Error applying migrations: {e.Message}");
             }
         }
-        
+
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Error");
@@ -107,10 +118,10 @@ static class Program
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
-        app.UseSession();           
+        app.UseSession();
 
         app.MapControllers();
-        app.MapRazorPages(); 
+        app.MapRazorPages();
 
         app.Run();
     }

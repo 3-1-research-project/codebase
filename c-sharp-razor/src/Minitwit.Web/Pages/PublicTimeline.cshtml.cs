@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Minitwit.Web.Helpers;
 using Minitwit.Web.Models;
 
 namespace Minitwit.Web.Pages;
@@ -14,13 +15,14 @@ public class PublicTimelineModel : PageModel
     {
         _service = service;
     }
-    
+
     public async Task<ActionResult> OnGet()
-    {   
+    {
         await InitializeVariables();
+        // GCLogger.LogGarbageCollection("public timeline");
         return Page();
     }
-    
+
     public async Task InitializeVariables()
     {
         int page;
@@ -34,7 +36,7 @@ public class PublicTimelineModel : PageModel
         }
         await InitializeVariables(page);
     }
-    
+
     public async Task InitializeVariables(int page)
     {
         Messages = await _service.GetMessagesAsync(page) ?? new List<MessageViewModel>();

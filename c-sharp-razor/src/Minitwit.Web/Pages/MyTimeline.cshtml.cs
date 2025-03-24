@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Minitwit.Core.Entities;
 using Minitwit.Core.Repository;
+using Minitwit.Web.Helpers;
 using Minitwit.Web.Models;
 
 namespace Minitwit.Web.Pages;
@@ -21,33 +22,34 @@ public class MyTimelineModel : PageModel
 
     public MyTimelineModel(
         IMessageService service,
-        IMessageRepository  messageRepository,
+        IMessageRepository messageRepository,
         IAuthorRepository authorRepository,
         IFollowRepository followRepository,
         IValidator<CreateMessage> validator,
         UserManager<Author> userManager,
         SignInManager<Author> signInManager
     )
-    {   
+    {
         _service = service;
         _MessageRepository = messageRepository;
         _userManager = userManager;
         _signInManager = signInManager;
     }
-    
+
     public async Task<ActionResult> OnGet()
-    {   
+    {
         await InitializeVariables();
+        // GCLogger.LogGarbageCollection("my timeline");
         return Page();
     }
 
     [BindProperty(Name = "text", SupportsGet = false)]
     public string Text { get; set; }
-    
+
     public async Task<IActionResult> OnPostCreateMessage()
-    {   
+    {
         if (!ModelState.IsValid)
-        {   
+        {
             return Page();
         }
         if (string.IsNullOrWhiteSpace(Text))
@@ -56,14 +58,16 @@ public class MyTimelineModel : PageModel
         }
         var author = await _userManager.GetUserAsync(User);
         if (author == null)
-        {   
+        {
             return RedirectToPage("/Login");
         }
-        
+
         user = author;
         var Message = new CreateMessage(author.Id, Text);
         await CreateMessage(Message);
         TempData["FlashMessage"] = "Your message was recorded";
+
+        // GCLogger.LogGarbageCollection("post message");
         return RedirectToPage("/MyTimeline");
     }
 
@@ -92,7 +96,7 @@ public class MyTimelineModel : PageModel
         await LoadMessages(user, page);
         currentPage = page;
     }
-    
+
     private async Task LoadMessages(Author signedInAuthor, int page)
     {
         try
