@@ -32,6 +32,14 @@
           --><input type=submit value="Share">
         </form>
       </div>
+    {% else if request_endpoint == "public_timeline" %}
+      <div class=twitbox>
+        <h3>What's on your mind {{ user.as_ref().unwrap().username }}?</h3>
+        <form action="/add_message" method=post>
+          <p><input type=text name=text size=60><!--
+          --><input type=submit value="Share">
+        </form>
+      </div>
     {% endif %}
   {% endif %}
   <ul class=messages>

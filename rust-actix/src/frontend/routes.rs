@@ -237,11 +237,18 @@ async fn add_message(
     pool: web::Data<Arc<DatabasePool>>,
     msg: web::Form<MessageInfo>,
     session: Session,
+    req: HttpRequest,  // Add HttpRequest to access headers
 ) -> impl Responder {
+    let referer = req.headers().get("referer").and_then(|val| val.to_str().ok());
+
     match session.get::<i32>("user_id") {
         Ok(Some(user_id)) => {
             let mut conn = pool.get().await.unwrap();
             let timestamp = Utc::now();
+
+            // Get the previous page URL from referer header
+            let previous_page: Option<String> = referer.map(|s| s.to_string());
+
             if msg.text.is_empty() {
                 if let Some(user) = get_user(&mut conn, session).await {
                     let messages = format_messages(
@@ -260,6 +267,7 @@ async fn add_message(
                     }
                     .render()
                     .unwrap();
+
                     return HttpResponse::Ok().body(context);
                 } else {
                     return HttpResponse::TemporaryRedirect()
@@ -267,10 +275,15 @@ async fn add_message(
                         .finish();
                 }
             }
+
             let _ = create_msg(&mut conn, &user_id, &msg.text, timestamp, &0).await;
             add_flash(&session, "Your message was recorded");
+
+            // Redirect to previous page or default to user timeline
+            let redirect_url = previous_page.unwrap_or("/".to_string());
+
             HttpResponse::Found()
-                .append_header((header::LOCATION, "/"))
+                .append_header((header::LOCATION, redirect_url))
                 .finish()
         }
         Ok(None) => HttpResponse::Unauthorized()
@@ -417,7 +430,7 @@ async fn post_register<'a>(
 
 #[get("/logout")]
 async fn logout(session: Session) -> impl Responder {
-    add_flash(&session, "You were logged out.");
+    add_flash(&session, "You were logged out");
     session.remove("user_id");
     Redirect::to("/public").see_other()
 }
