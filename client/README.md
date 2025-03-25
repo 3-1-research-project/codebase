@@ -9,7 +9,7 @@ A container for running the clients are pushed to the [GitHub Organization 3-1 C
 To run a container use the command below and update the port used. Make sure the `<port>` is the same. Also remember to change `<client-x>`, and `<version number>`
 
 ```bash
-docker run --name <client-x> --env PORT=<port> --publish <port>:<port> 3-1-research-project/client:<version number>
+docker run --name <client-x> --detach --env PORT=<port> --publish <port>:<port> 3-1-research-project/client:<version number>
 ```
 
 ### How to limit the amount of CPUs used
