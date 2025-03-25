@@ -6,6 +6,9 @@ COPY . /app
 
 RUN pip install -r requirements.txt
 
+RUN playwright install \
+    && playwright install-deps
+
 ENV PORT=5000
 
 CMD fastapi run client_api.py --port $PORT
