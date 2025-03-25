@@ -1,0 +1,49 @@
+name: Push Client Container Image to GitHub Container Registry
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+
+env:
+    REGISTRY: ghcr.io
+    IMAGE_NAME: 3-1-research-project/client
+
+jobs:
+    build-and-publish-image:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Extract PostgreSQL version
+              id: extract-version
+              run: |
+                PYTHON_VERSION=$(grep -oP '(?<=FROM python:)\d+' client/dockerfile)
+                echo "PYTHON_VERSION=$PYTHON_VERSION" >> $GITHUB_ENV
+
+            - name: Log in to the Container registry
+              uses: docker/login-action@v2
+              with:
+                registry: ${{ env.REGISTRY }}
+                username: ${{ github.actor }}
+                password: ${{ secrets.PAT }}
+
+            - name: Extract metadata (tags, labels) for Docker
+              id: meta
+              uses: docker/metadata-action@v3
+              with:
+                images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+                tags: |
+                  ${{ env.PYTHON_VERSION }}
+
+            - name: Build and push Docker image
+              id: push
+              uses: docker/build-push-action@v3
+              with:
+                context: postgres/
+                push: true
+                tags: ${{ steps.meta.outputs.tags }}
+                labels: ${{ steps.meta.outputs.labels }}
