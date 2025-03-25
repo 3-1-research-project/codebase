@@ -43,7 +43,7 @@ jobs:
               id: push
               uses: docker/build-push-action@v3
               with:
-                context: postgres/
+                context: client/
                 push: true
                 tags: ${{ steps.meta.outputs.tags }}
                 labels: ${{ steps.meta.outputs.labels }}
