@@ -11,7 +11,7 @@
     <h1>MiniTwit</h1>
     <div class="navigation">
       {{if .UserID}}
-      <a href="{{url_for "timeline" "" }}">my timeline</a> |
+      <a href="{{url_for "my_timeline" "" }}">my timeline</a> |
       <a href="{{url_for "public_timeline" "" }}">public timeline</a> |
       <a href="{{url_for "logout" "" }}">sign out [{{.User}}]</a> 
       {{else}}
@@ -38,7 +38,16 @@
           {{end}}
       </div>
     {{else if eq .Endpoint "public_timeline"}}
-      <h2>Public Timeline</h2>
+    <h2>Public Timeline</h2>
+    <div class="twitbox">
+      <h3>What's on your mind, {{.User}}?</h3>
+      <form action="{{url_for "add_message" "" }}" method="POST">
+        <p>
+          <input type="text" name="text" size="60">
+          <input type="submit" value="Share">
+        </p>
+      </form>
+    </div>
     {{else if eq .Endpoint "my_timeline"}}
     <h2>My Timeline</h2>
     <div class="twitbox">
@@ -52,6 +61,7 @@
     </div>
     {{end}}
 
+
     {{if .FlashMessages}}
     <div class="flashes">
       {{range .FlashMessages}}
@@ -64,7 +74,7 @@
       {{range $fields := .Messages}}
       <li>
         <img src="{{getavatar $fields.Email 48}}" alt="{{$fields.Username}}'s avatar">
-        <strong><a href="{{url_for "timeline" (formatUsernameUrl $fields.Username)}}">{{$fields.Username}}</a></strong>
+        <strong><a href="{{url_for "user_timeline" (formatUsernameUrl $fields.Username) }}">{{$fields.Username}}</a></strong>
         {{$fields.Text}}
         <small>&mdash; {{gettimestamp $fields.PubDate}}</small>
       </li>
