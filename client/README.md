@@ -9,5 +9,15 @@ A container for running the clients are pushed to the [GitHub Organization 3-1 C
 To run a container use the command below and update the port used. Make sure the `<port>` is the same. Also remember to change `<client-x>`, and `<version number>`
 
 ```bash
-docker run --rm --detach --name <client-x> --env PORT=<port> --publish <port>:<port> 3-1-research-project/client:<version number>
+docker run --name <client-x> --env PORT=<port> --publish <port>:<port> 3-1-research-project/client:<version number>
 ```
+
+### How to limit the amount of CPUs used
+
+If you want to limit the container to use 1 specific cpu, you can specify it as below
+
+```bash
+docker run --name <client-x> --env PORT=<port> --publish <port>:<port> --cpuset-cpus="<core number>" 3-1-research-project/client:<version number>
+```
+
+Where `<core number>` is the specific core you want to limit to. Note, it is a 0 indexed list meaning if a CPU has 4 cores the possible values are 0, 1, 2, and 3.
