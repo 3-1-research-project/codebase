@@ -64,20 +64,6 @@ async def request(command, *args):
 
     # return result, end - start
 
-
-async def prep_public_timeline(nameList):
-    for i in range(20):
-        username = nameList[i]
-        await test_create_msg(i, username)
-
-
-async def make_many_messages(nameList, num_msg, per_user):
-    for i in range(num_msg):
-        if i % per_user == 0:
-            username = nameList[i // per_user]
-        await test_create_msg(i, username)
-
-
 async def create_many_users(nameList):
     for name in nameList:
         await create_user(name)
@@ -137,12 +123,12 @@ async def execute_scenario(nameList, url=BASE_URL):
             await request(create_msg, page, 30)
             await request(logout, page)
 
-        # CREATE (login), READ (many different users in loop)
-        for user in nameList:
-            await request(login, page, user, "hej")
-            for name in nameList:
-                await request(playwright_visit_user, page, name)
-            await request(logout, page)
+        # # CREATE (login), READ (many different users in loop)
+        # for user in nameList:
+        #     await request(login, page, user, "hej")
+        #     for name in nameList:
+        #         await request(playwright_visit_user, page, name)
+        #     await request(logout, page)
 
         # CREATE (login), READ-CREATE-READ (Follow Users)
         for user in nameList:
@@ -183,7 +169,7 @@ def setup_logging():
 
 def makeNameList():
     randomString = "".join(random.choices(string.ascii_uppercase, k=8))
-    return [f"User{i+1}{randomString}" for i in range(20)]
+    return [f"User{i+1}{randomString}" for i in range(10)]
 
 
 async def run(url):
@@ -192,9 +178,6 @@ async def run(url):
 
     # Make logfile
     setup_logging()
-
-    print("LOOK HERE")
-    print(nameList)
 
     # Run scenario
     await execute_scenario(nameList, url)
