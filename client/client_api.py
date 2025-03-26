@@ -59,8 +59,10 @@ async def start(
 
 
 @app.post("/cleardb", status_code=status.HTTP_200_OK)
-async def clear_db():
-    with psycopg2.connect(DATABASE_URL) as conn:
+async def clear_db(
+    db_url: str = Body(..., description="The url of the database", nullable=True),
+):
+    with psycopg2.connect(db_url or DATABASE_URL) as conn:
         with conn.cursor() as cur:
             tables_to_truncate = [
                 "users",
