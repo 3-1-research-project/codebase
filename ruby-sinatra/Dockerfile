@@ -15,4 +15,4 @@ COPY ./src .
 
 EXPOSE 5000
 
-CMD ["bundle", "exec", "ruby", "main.rb"]
+CMD ["bundle", "exec", "ruby", "main.rb", "-o", "0.0.0.0", "-p", "5000"]
