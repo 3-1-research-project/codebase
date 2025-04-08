@@ -55,4 +55,4 @@ BASE_COMPOSE_FILES_LOCATION = '/media/mmcblk0p2/setup/compose_files/'
 Each MiniTwit Implementation will contain a readme specifying how to run the project on a Raspberry Pi with a specific operating system
 
 ## Index
-- 
+- [Ruby Sinatra](./ruby-sinatra/README.md)
