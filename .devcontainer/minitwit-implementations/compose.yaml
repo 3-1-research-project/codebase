@@ -25,3 +25,10 @@ services:
       - 5432:5432
     volumes:
       - ../../database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+  playwright-experiment:
+    image: playwright-experiment
+    build: .
+    container_name: playwright-experiment
+    volumes:
+    - ..:/workspaces:cached

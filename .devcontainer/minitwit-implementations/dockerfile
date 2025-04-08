@@ -29,6 +29,14 @@ RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-p
 
 RUN apt-get update \ 
     && apt-get install -y dotnet-sdk-8.0
+    
+# Install Rust via rustup
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
+    && echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> /root/.bashrc \
+    && /root/.cargo/bin/rustc --version
+
+# Set the correct PATH for interactive sessions
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 EXPOSE 5000:5000
 
