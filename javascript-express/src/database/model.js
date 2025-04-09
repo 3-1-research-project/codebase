@@ -10,13 +10,13 @@ const connectionOptions =
     databaseUrl.includes('database') || databaseUrl.includes('localhost')
         ? {}
         : {
-              dialectOptions: {
-                  ssl: {
-                      require: true,
-                      rejectUnauthorized: false,
-                  },
-              },
-              logging: false,
+            //   dialectOptions: {
+            //       ssl: {
+            //           require: true,
+            //           rejectUnauthorized: false,
+            //       },
+            //   },
+            //   logging: false,
           };
 
 const sequelize = new Sequelize(databaseUrl, {

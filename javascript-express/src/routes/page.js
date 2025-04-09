@@ -183,6 +183,7 @@ router.post('/add_message', async (req, res) => {
     }
 
     const text = req.body.text;
+    const source = req.body.source;
 
     if (!text) {
         req.flash('success', 'Message cannot be empty!'); // minimal effort maximum result ¯\_(ツ)_/¯
@@ -195,7 +196,10 @@ router.post('/add_message', async (req, res) => {
     if (success) {
         req.flash('success', 'Your message was recorded');
 
-        res.redirect('/');
+         source === 'publicTimeline'
+            ? res.redirect('/public')
+            : res.redirect('/')
+        ;
     } else {
         res.status(500).send('Internal Server Error');
     }
