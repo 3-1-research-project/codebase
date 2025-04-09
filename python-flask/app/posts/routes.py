@@ -26,4 +26,4 @@ def add_message():
         db.session.commit()
         flash("Your message was recorded")
 
-    return redirect(url_for("main.timeline"))
+    return redirect(request.referrer or url_for("main.timeline"))
