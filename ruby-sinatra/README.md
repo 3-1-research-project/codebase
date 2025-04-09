@@ -47,15 +47,3 @@ bundle exec ruby --yjit main.rb -o 0.0.0.0 -p 5000
 ```
 LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 bundle exec ruby main.rb -o 0.0.0.0 -p 5000
 ```
-
-#### mimalloc
-
-```
-LD_PRELOAD=/usr/lib/<device specific architecture>/libmimalloc.so.2.0 bundle exec ruby main.rb -o 0.0.0.0 -p 5000
-```
-
-#### tcmalloc
-
-```
-LD_PRELOAD=/usr/lib/<device specific architecture>/libtcmalloc_minimal.so.4.5.9 bundle exec ruby main.rb -o 0.0.0.0 -p 5000
-```

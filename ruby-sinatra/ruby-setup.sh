@@ -15,9 +15,7 @@ apt install -y \
 
 # Install allocators
 apt install -y \
-    libjemalloc2 \
-    libmimalloc2.0 \
-    libtcmalloc-minimal4
+    libjemalloc2 
 
 apt install rbenv
 
