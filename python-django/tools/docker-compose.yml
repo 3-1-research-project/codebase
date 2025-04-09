@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  server:
+    image: ${DOCKER_USERNAME}/minitwitimage
+    container_name: minitwit
+    ports:
+      - 5000:5000
+    restart: always
+    volumes:
+      - ../../minitwit/logs:/logs
+    command:
+      - /bin/sh
+      - -c
+      - |
+        sleep 5
+        python3 ./manage_prod.py migrate --run-syncdb
+        python3 ./manage_prod.py collectstatic
+        python3 ./manage_prod.py runserver 0.0.0.0:5000 --insecure
+    networks:
+      - djangonetwork
+
+  prometheus:
+    image: prom/prometheus
+    restart: always
+    volumes:
+      - prometheus-storage:/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    networks:
+      - djangonetwork
+
+  grafana:
+    image: grafana/grafana:4.5.2
+    restart: always
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    ports:
+      - 3000:3000
+    networks:
+      - djangonetwork
+
+networks:
+  djangonetwork:
+    driver: bridge
+
+volumes:
+  logs-storage:
+    external: true
+  grafana-storage:
+    external: true
+  prometheus-storage:
+    external: true
