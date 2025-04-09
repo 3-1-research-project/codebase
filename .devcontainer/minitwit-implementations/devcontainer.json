@@ -20,7 +20,8 @@
 				"ms-dotnettools.csdevkit",
 				"ms-dotnettools.csharp",
 				"ms-dotnettools.vscodeintellicode-csharp",
-				"SonarSource.sonarlint-vscode"
+				"SonarSource.sonarlint-vscode",
+				"Shopify.ruby-lsp"
 			]
 		}
 	}
