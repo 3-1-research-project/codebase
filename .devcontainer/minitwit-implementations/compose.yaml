@@ -13,8 +13,6 @@ services:
       - DATABASE_URL=postgresql://postgres:1234@postgres-implementations:5432/postgres
       - BASE_URL=http://localhost:5000
       - SECRET_KEY=waectsk
-    ports:
-      - 5000:5000
 
   postgres-implementations:
     image: postgres:17
