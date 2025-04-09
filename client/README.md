@@ -1,6 +1,25 @@
 # Client Code
 
-TODO:
+You can test the client code locally by setting up a postgres database and MiniTwit implementation, e.g.,:
+
+Postgres container: `docker run --rm --detach --env POSTGRES_HOST_AUTH_METHOD=trust --network host --name postgres-temp ghcr.io/3-1-research-project/postgres:17`
+
+MiniTwit Python: 
+```
+$env:SECRET_KEY="waectsk"
+$env:DATABASE_URL="postgresql://user:pass@localhost:5432/waect"
+
+cd /python-flask/
+gunicorn --bind 0.0.0.0:5000 wsgi:app
+```
+
+Then the client code can be run in headed mode by in slow motion by:
+
+```
+cd /client/
+
+python run_scenario.py http://localhost:5000 False 200
+```
 
 ## Container
 

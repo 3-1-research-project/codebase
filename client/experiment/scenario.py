@@ -9,6 +9,7 @@ from experiment.actions import navigate_to, press_link, fill_input, submit_input
 import logging
 import os
 from datetime import datetime
+import sys
 
 BASE_URL = "http://host.docker.internal:5000"
 
@@ -107,9 +108,9 @@ async def create_user(page, username):
     await submit_input(page)
 
 
-async def execute_scenario(nameList, url=BASE_URL):
+async def execute_scenario(nameList, url=BASE_URL, headless=True, slow_mo=None):
     async with async_playwright() as p:
-        browser = await p.chromium.launch()
+        browser = await p.chromium.launch(headless=headless, slow_mo=slow_mo)
         page = await browser.new_page(base_url=url)
         await request(page.goto, "/login")
 
@@ -183,16 +184,11 @@ async def run(url):
     await execute_scenario(nameList, url)
 
 
-async def main():
+async def main(url, headless=True, slow_mo=None):
     # Generate a list of 20 usernames
     nameList = makeNameList()
 
-    # Make logfile
+
     setup_logging()
 
-    # Run scenario
-    await execute_scenario(nameList)
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
+    await execute_scenario(nameList, url=url, headless=headless, slow_mo=slow_mo)

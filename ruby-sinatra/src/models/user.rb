@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   attr_reader :password
 
   validates :username, presence: true, uniqueness: true
-  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, presence: true, confirmation: true, if: -> { pw_hash.blank? || !password.nil? }
 
   # overrides the password= method to set the encrypted password in the pw_hash column
@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
 
   validates :username, presence: true, uniqueness: true
   validates :password, :password_confirmation, presence: true
-  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   def follows?(other_user)
     following.include?(other_user)
