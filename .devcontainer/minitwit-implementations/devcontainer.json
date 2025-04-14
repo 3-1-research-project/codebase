@@ -6,6 +6,7 @@
 	"service": "minitwit-implementations",
 	"workspaceFolder": "/workspaces/",
 	"postCreateCommand": "bash .devcontainer/minitwit-implementations/post-create.sh",
+	"remoteUser": "root",
 	"customizations": {
 		"vscode": {
 			"extensions": [
