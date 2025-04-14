@@ -13,11 +13,15 @@
 				"ms-python.black-formatter",
 				"ms-python.debugpy",
 				"ms-python.python",
+				"ms-vscode.vscode-typescript-next",
+				"ms-vscode.js-debug-nightly",
+				"dbaeumer.vscode-eslint",
 				"ms-dotnettools.vscode-dotnet-runtime",
 				"ms-dotnettools.csdevkit",
 				"ms-dotnettools.csharp",
 				"ms-dotnettools.vscodeintellicode-csharp",
-				"SonarSource.sonarlint-vscode"
+				"SonarSource.sonarlint-vscode",
+				"Shopify.ruby-lsp"
 			]
 		}
 	}

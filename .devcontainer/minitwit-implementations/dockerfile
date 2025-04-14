@@ -9,8 +9,24 @@ RUN apt-get update \
         python3-pip \
         libpq-dev \
         golang \
+        ruby \
+        ruby-dev \
         -y \
     && rm -rf /var/lib/apt/lists/*
+
+# Install nvm, Node.js, and npm
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
+    && export NVM_DIR="/root/.nvm" \
+    && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" \
+    && nvm install node \
+    && nvm use node \
+    && nvm alias default node \
+    && ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/node" /usr/local/bin/node \
+    && ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/npm" /usr/local/bin/npm \
+    && ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/npx" /usr/local/bin/npx
+    
+# Setup ruby
+RUN gem install bundler
 
 # Install node
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash \
@@ -24,7 +40,7 @@ RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-p
 
 RUN apt-get update \ 
     && apt-get install -y dotnet-sdk-8.0
-
+    
 # Install Rust via rustup
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
     && echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> /root/.bashrc \
@@ -32,6 +48,8 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
 
 # Set the correct PATH for interactive sessions
 ENV PATH="/root/.cargo/bin:${PATH}"
+
+EXPOSE 5000:5000
 
 # Keep container running (for debugging)
 CMD sleep infinity
