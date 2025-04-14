@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 	"text/template"
-
+ 	_ "net/http/pprof"
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 )
@@ -15,6 +15,10 @@ import (
 var err error
 
 func main() {
+
+	go func() {
+		log.Println(http.ListenAndServe("localhost:6060", nil))
+	}()
 
 	/*----------------------
 	 * Load env vars

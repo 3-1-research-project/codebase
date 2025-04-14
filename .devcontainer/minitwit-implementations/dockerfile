@@ -8,11 +8,15 @@ RUN apt-get update \
         python3 \
         python3-pip \
         libpq-dev \
-        golang \
         ruby \
         ruby-dev \
         -y \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Go 1.22.2 manually
+RUN wget https://go.dev/dl/go1.22.2.linux-amd64.tar.gz \
+    && tar -C /usr/local -xzf go1.22.2.linux-amd64.tar.gz \
+    && rm go1.22.2.linux-amd64.tar.gz
 
 # Install nvm, Node.js, and npm
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
@@ -48,6 +52,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
 
 # Set the correct PATH for interactive sessions
 ENV PATH="/root/.cargo/bin:${PATH}"
+ENV PATH="/usr/local/go/bin:$PATH"
 
 EXPOSE 5000:5000
 
