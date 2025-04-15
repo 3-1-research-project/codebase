@@ -48,3 +48,12 @@ Configure you own addresses with your own IP in the `execution.py`:
 Place your Docker Compose files in the specified base location:
 ```python
 BASE_COMPOSE_FILES_LOCATION = '/media/mmcblk0p2/setup/compose_files/'
+```
+
+# How to run on Raspberry Pis
+
+Each MiniTwit Implementation will contain a readme specifying how to run the project on a Raspberry Pi with a specific operating system
+
+## Index
+- [Ruby Sinatra](./ruby-sinatra/README.md#how-to-run-on-raspberry-pi)
+- [Rust Actix](./rust-actix/README.md#how-to-run-on-raspberry-pi)
