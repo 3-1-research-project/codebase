@@ -17,13 +17,8 @@ public class MiniTwitApplication {
 
 
     public static void main(final String[] args) {
-        try {
-            Class.forName("org.postgresql.Driver");
-            System.out.println("PostgreSQL JDBC Driver is in the classpath!");
-        } catch (ClassNotFoundException e) {
-            System.out.println("PostgreSQL JDBC Driver is missing!");
-            e.printStackTrace();
-        }
+        // Class.forName("org.postgresql.Driver");
+        
         
         SpringApplication.run(MiniTwitApplication.class, args);
     }
