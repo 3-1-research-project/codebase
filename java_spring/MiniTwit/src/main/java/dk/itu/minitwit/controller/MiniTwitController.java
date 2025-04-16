@@ -350,7 +350,6 @@ public class MiniTwitController {
         } else {
             redirectAttributes.addFlashAttribute("error", "Message cannot be empty!");
             model.addAttribute("error", "Message cannot be empty!");
-            // return "timeline.html";
         }
 
         String referer = request.getHeader("Referer");
