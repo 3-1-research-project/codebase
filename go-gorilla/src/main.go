@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"text/template"
- 	_ "net/http/pprof"
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 )
