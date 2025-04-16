@@ -109,10 +109,11 @@ func UserTimelineHandler(c *gin.Context) {
 	}
 
 	// does the logged in user follow them
-	followed, _ := db.GetFollowing(userID.(int), 30) //TODO: LIMIT OF FOLLOWERS WE QUERY?
 	pUserId := profileUser.UserID
 	profileName := profileUser.Username
 	userName, _ := db.GetUserNameByUserID(userID.(int))
+
+	followed, _ := db.IsFollowing(userID.(int), pUserId)
 
 	messages, err := db.GetUserMessages(pUserId, 30)
 

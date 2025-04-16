@@ -170,6 +170,22 @@ func GetFollowing(userID int, limit int) ([]models.Users, error) {
 	return users, nil
 }
 
+func IsFollowing(userID int, visitorID int) (bool, error) {
+	var follower models.Followers
+	result := config.DB.
+		Where("who_id = ? AND whom_id = ?", userID, visitorID).
+		First(&follower)
+
+	if result.Error != nil {
+		if result.Error.Error() == "record not found" {
+			return false, nil
+		}
+		return false, result.Error
+	}
+
+	return true, nil
+}
+
 // adds a new message to the database
 func AddMessage(text string, author_id int) error {
 	currentTime, err := time.Parse(time.RFC3339, time.Now().UTC().Format(time.RFC3339))
