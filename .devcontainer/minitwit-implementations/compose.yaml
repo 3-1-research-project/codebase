@@ -11,6 +11,7 @@ services:
       - 5000:5000
     environment:
       - DATABASE_URL=postgresql://postgres:1234@postgres-implementations:5432/postgres
+      - DATABASE_URL_JAVA=jdbc:postgresql://postgres-implementations:5432/postgres?user=postgres&password=1234
       - BASE_URL=http://localhost:5000
       - SECRET_KEY=waectsk
 

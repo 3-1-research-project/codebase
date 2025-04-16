@@ -16,10 +16,11 @@ public class PostgreSQL {
 
 
 
-    private final String DATABASE_URL = "jdbc:postgresql://postgres-implementations:5432/postgres"; 
-    private final String user = "postgres";
-    private final String password = "1234";
+    private final String DATABASE_URL =  System.getenv("DATABASE_URL_JAVA");
 
+    public PostgreSQL() {
+        super();
+    }
     
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -29,8 +30,8 @@ public class PostgreSQL {
     
     private Connection connectDb() throws SQLException, ClassNotFoundException {
          Properties props = new Properties();
-         props.setProperty("user", user);
-         props.setProperty("password", password);
+        //  props.setProperty("user", user);
+        //  props.setProperty("password", password);
          
          return DriverManager.getConnection(DATABASE_URL, props);
      }
