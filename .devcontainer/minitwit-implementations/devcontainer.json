@@ -21,7 +21,8 @@
 				"ms-dotnettools.csharp",
 				"ms-dotnettools.vscodeintellicode-csharp",
 				"SonarSource.sonarlint-vscode",
-				"Shopify.ruby-lsp"
+				"Shopify.ruby-lsp",
+				"redhat.java"
 			]
 		}
 	}

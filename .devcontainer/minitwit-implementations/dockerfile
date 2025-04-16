@@ -56,5 +56,14 @@ ENV PATH="/usr/local/go/bin:$PATH"
 
 EXPOSE 5000:5000
 
+# Install Java and Maven packages
+RUN apt-get update && apt-get install -y openjdk-17-jdk
+RUN apt-get update && apt-get install -y maven
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV PATH="$JAVA_HOME/bin:$PATH"
+WORKDIR /app/java_spring/MiniTwit
+# RUN mvn clean install -U
+
+WORKDIR /app
 # Keep container running (for debugging)
 CMD sleep infinity
