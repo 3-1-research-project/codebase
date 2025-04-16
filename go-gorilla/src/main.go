@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"text/template"
-
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 )
@@ -15,7 +14,6 @@ import (
 var err error
 
 func main() {
-
 	/*----------------------
 	 * Load env vars
 	 *----------------------*/
