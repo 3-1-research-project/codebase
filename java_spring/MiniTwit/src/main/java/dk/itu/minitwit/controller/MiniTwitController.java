@@ -247,12 +247,6 @@ public class MiniTwitController {
                     "\n" + Arrays.toString(e.getStackTrace()).formatted( model.getAttribute("requestID")));
             return "";
         }
-        // if (whomId == null) {
-        //     logger.info("Request ID: %s -- User: %s not found - cannot follow - redirecting to public"
-        //             .formatted( model.getAttribute("requestID"), username));
-        //     return "redirect:/public";
-        // }
-
         List<Object> args = new ArrayList<>();
         args.add(session.getAttribute("user_id"));
         args.add(whomId);
