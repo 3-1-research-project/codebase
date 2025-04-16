@@ -11,7 +11,9 @@ apt install -y \
     libffi-dev \
     libedit-dev \
     libyaml-dev \
-    rbenv
+    rbenv \
+    ruby \
+    ruby-dev 
 
 # Install allocators
 apt install -y \
@@ -21,11 +23,11 @@ apt install rbenv
 
 git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 
-rbenv install $RUBY_VERSION
-
 eval "$(rbenv init -)"
 
-rbenv global $RUBY_VERSION
-rbenv local $RUBY_VERSION
-rbenv shell $RUBY_VERSION
-rbenv rehash
+# rbenv install $RUBY_VERSION
+
+# rbenv global $RUBY_VERSION
+# rbenv local $RUBY_VERSION
+# rbenv shell $RUBY_VERSION
+# rbenv rehash

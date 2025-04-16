@@ -22,7 +22,7 @@ sudo apt update && sudo apt install libpq-dev
 ### Requirements
 - Rust version >= 1.58 (See https://github.com/ruby/ruby/blob/master/doc/yjit/yjit.md)
 
-### Installing and updating ruby to 3.4.0
+### Installing and updating ruby to 3.2.3
 
 See [this repository](https://github.com/rbenv/ruby-build) for a full guide
 
