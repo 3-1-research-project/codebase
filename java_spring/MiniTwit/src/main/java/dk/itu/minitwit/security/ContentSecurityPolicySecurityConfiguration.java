@@ -12,11 +12,15 @@ public class ContentSecurityPolicySecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-        .csrf().disable()
-        .headers()
-        .xssProtection()
-        .and()
-        .contentSecurityPolicy("form-action 'self' always; default-src 'none'; script-src 'self'; style-src 'self' *.academicweapons.dk/*; font-src 'self'; connect-src 'self'; img-src 'self' *.gravatar.com; frame-src 'none'; frame-ancestors 'none'; media-src 'none'; object-src 'none'; manifest-src 'none'; worker-src 'none';");
+            .csrf().disable()
+            .authorizeHttpRequests((authz) -> authz
+                .anyRequest().permitAll()
+            )
+            .headers()
+            .xssProtection()
+            .and()
+            .contentSecurityPolicy("form-action 'self' always; default-src 'none'; script-src 'self'; style-src 'self' *.academicweapons.dk/*; font-src 'self'; connect-src 'self'; img-src 'self' *.gravatar.com; frame-src 'none'; frame-ancestors 'none'; media-src 'none'; object-src 'none'; manifest-src 'none'; worker-src 'none';");
+
         return http.build();
     }
     

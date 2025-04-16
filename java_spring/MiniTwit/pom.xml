@@ -11,7 +11,7 @@
     <groupId>dk.itu</groupId>
     <artifactId>MiniTwit</artifactId>
     <version>1.0.3</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>MiniTwit</name>
     <description>MiniTwit</description>
     <properties>

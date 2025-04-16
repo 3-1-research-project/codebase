@@ -42,6 +42,12 @@
             <strong>Error:</strong>
             <span th:text="${error}"></span>
         </div>
+        <div th:if="${public == 'true'}" class="public">
+            <h2>Public Timeline</h2>
+        </div>
+        <div th:if="${my == 'true'}" class="my">
+            <h2>My Timeline</h2>
+        </div>
         <div th:if="${(public == 'true' || my == 'true') && user != 'false'}" class="twitbox">
             <h3>What's on your mind <span th:text="${username}"></span>?</h3>
             <form th:action="@{/add_message}" method="post">
@@ -53,17 +59,17 @@
         </div>
         <div th:if="${public == 'false' && user != 'false'}" class="followstatus">
             <span th:if="${self == 'true'}">This is you!</span>
-            <span th:if="${followed == 'true' && self != 'true'}">You are currently following this user.
-          <a class="unfollow" th:href="@{/{username}/unfollow(username=${username})}">
-            Unfollow user
-          </a>
-        </span>
-            <span th:if="${followed == 'false' && self != 'true'}">
-          You are not yet following this user.
-          <a class="follow" th:href="@{/{username}/follow(username=${username})}">
-            Follow user
-          </a>
-        </span>
+                <span th:if="${followed == 'true' && self != 'true'}">You are currently following this user.
+                    <a class="unfollow" th:href="@{/{username}/unfollow(username=${username})}">
+                        Unfollow user
+                    </a>
+                </span>
+                    <span th:if="${followed == 'false' && self != 'true'}">
+                You are not yet following this user.
+                <a class="follow" th:href="@{/{username}/follow(username=${username})}">
+                    Follow user
+                </a>
+            </span>
         </div>
             <ul class="messages">
                 <li th:each="message : ${messages}" th:if="${messagesSize > 0}">

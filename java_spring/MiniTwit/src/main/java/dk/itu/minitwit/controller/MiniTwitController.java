@@ -353,7 +353,18 @@ public class MiniTwitController {
             // return "timeline.html";
         }
 
-        String template = "redirect:/public";
+        String referer = request.getHeader("Referer");
+        String template = "";
+
+        if (referer != null){
+            if (referer.contains("/public"))
+                template = "redirect:/public";
+            else
+                template = "redirect:/";
+        } else {
+            template = "redirect:/public";
+        }
+
         logger.info("Request ID: %s -- Returning template: %s".formatted( model.getAttribute("requestID"), template));
         return template;
     }
@@ -391,23 +402,23 @@ public class MiniTwitController {
                 return "login.html";
             } else { // change redirects to my timeline
                 // Session
-                logger.info("Request ID: %s -- User logged in, redirecting to '/public'");
+                logger.info("Request ID: %s -- User logged in, redirecting to '/'");
                 
                 request.getSession().setAttribute("user", login.getUsername());
                 request.getSession().setAttribute("user_id", s.get(0).get("user_id"));
 
                 redirectAttributes.addFlashAttribute("flashMessage", "You were logged in");
-                String template = "redirect:/public";
+                String template = "redirect:/";
                 logger.info("Request ID: %s -- Returning template: %s".formatted( model.getAttribute("requestID"), template));
                 return template;
             }
         }
-        // if (logout != null) {
-        //     redirectAttributes.addFlashAttribute("flashMessage", "You were logged out");
-        //     return "redirect:/public";
-        // }
+        if (request.getParameter("logout") != null) {
+            redirectAttributes.addFlashAttribute("flashMessage", "You were logged out");
+            return "redirect:/public";
+        }
         String template = "login.html";
-        logger.info("Request ID: %s -- Returning template: %s".formatted( model.getAttribute("requestID"), template));
+        logger.info("Testtest: Request ID: %s -- Returning template: %s".formatted( model.getAttribute("requestID"), template));
         return template;
     }
 

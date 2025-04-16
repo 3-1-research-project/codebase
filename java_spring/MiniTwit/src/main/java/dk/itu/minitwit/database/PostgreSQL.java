@@ -16,7 +16,7 @@ public class PostgreSQL {
 
 
 
-    private final String DATABASE_URL = "jdbc:postgresql://postgres:5432/postgres"; 
+    private final String DATABASE_URL = "jdbc:postgresql://postgres-implementations:5432/postgres"; 
     private final String user = "postgres";
     private final String password = "1234";
 
