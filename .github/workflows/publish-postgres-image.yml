@@ -18,7 +18,7 @@ on:
 env:
     REGISTRY: ghcr.io
     IMAGE_NAME: 3-1-frontend-experiment/postgres
-    POSTGRES_PATH: frontend-experiment/postgres/
+    DOCKERFILE_PATH: frontend-experiment/postgres/
 
 jobs:
     build-and-publish-image:
@@ -37,7 +37,7 @@ jobs:
             - name: Extract PostgreSQL version
               id: extract-version
               run: |
-                POSTGRES_VERSION=$(grep -oP '(?<=FROM postgres:)\d+' ${{ env.POSTGRES_PATH }}dockerfile)
+                POSTGRES_VERSION=$(grep -oP '(?<=FROM postgres:)\d+' ${{ env.DOCKERFILE_PATH }}dockerfile)
                 echo "POSTGRES_VERSION=$POSTGRES_VERSION" >> $GITHUB_ENV
                             
             - name: Build container image
@@ -45,7 +45,7 @@ jobs:
               id: build
               uses: docker/build-push-action@v3
               with:
-                context: ${{ env.POSTGRES_PATH }}
+                context: ${{ env.DOCKERFILE_PATH }}
                 platforms: linux/amd64,linux/arm64
                 push: false
                 tags: test-build:${{ env.POSTGRES_VERSION }}
@@ -72,7 +72,7 @@ jobs:
               id: push
               uses: docker/build-push-action@v3
               with:
-                context: ${{ env.POSTGRES_PATH }}
+                context: ${{ env.DOCKERFILE_PATH }}
                 platforms: linux/amd64,linux/arm64
                 push: true
                 tags: ${{ steps.meta.outputs.tags }}
