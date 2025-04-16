@@ -354,10 +354,6 @@ func User_timeline(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	username := vars["username"]
 
-	following, err := db.GetFollowing(user_id, 30) //TODO: LIMIT OF FOLLOWERS WE QUERY?
-	if err != nil {
-		fmt.Println("Error when trying to query the database for the following")
-	}
 	profile_user, err := db.GetUserByUsername(username)
 	if err != nil || helpers.IsNil(profile_user) {
 		SetFlash(w, r, "The user does not exist")
@@ -365,6 +361,11 @@ func User_timeline(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	profile_user_id := profile_user.UserID
+
+	following, err := db.IsFollowing(user_id, profile_user_id)
+	if err != nil {
+		fmt.Println("Error when trying to query the database for the following")
+	}
 
 	messages, err := db.GetUserMessages(profile_user_id, 30)
 	if err != nil {
