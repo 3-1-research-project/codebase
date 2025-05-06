@@ -1,0 +1,18 @@
+{
+	"name": "gh-actions-python-tests",
+	"dockerComposeFile": [
+		"./compose.yaml"
+	],
+	"service": "gh-actions-python-tests",
+	"workspaceFolder": "/workspaces/",
+	"postCreateCommand": "bash .devcontainer/gh-action-python-tests/post-create.sh",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.black-formatter",
+				"ms-python.debugpy",
+				"ms-python.python"
+			]
+		}
+	}
+}

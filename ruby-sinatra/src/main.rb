@@ -100,9 +100,9 @@ get '/register' do
 end
 
 post '/register' do
-  existing_user = User.find_by(email: params[:email]) || User.find_by(username: params[:username])
+  existing_user = User.find_by(username: params[:username])
   if existing_user
-    flash[:error] = 'A user with this email or username already exists.'
+    flash[:error] = 'The username is already taken'
     redirect('/register')
     return
   end
@@ -164,7 +164,7 @@ post '/add_message' do
     flash[:error] = 'Something went wrong :('
   end
 
-  redirect('/')
+  redirect(request.referer)
 end
 
 get '/user/:username' do
@@ -210,7 +210,7 @@ namespace '/api' do
   post '/register' do
     request_data = JSON.parse(request.body.read, symbolize_names: true)
 
-    existing_user = User.find_by(email: request_data[:email]) || User.find_by(username: request_data[:username])
+    existing_user = User.find_by(username: request_data[:username])
     if existing_user
       status 400
       body({ status: 400, error_msg: ' a user with this email or username already exists.' }.to_json)

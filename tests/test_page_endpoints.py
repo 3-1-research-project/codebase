@@ -6,19 +6,20 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.firefox.options import Options
 
+from helpers.postgres_helper import DATABASE_URL
+from helpers.test_helper import BASE_URL
+
 # Updated to match API test file settings
-USERNAME = 'simulator'
-PWD = 'super_safe!'
-CREDENTIALS = ':'.join([USERNAME, PWD]).encode('ascii')
+USERNAME = "simulator"
+PWD = "super_safe!"
+CREDENTIALS = ":".join([USERNAME, PWD]).encode("ascii")
 ENCODED_CREDENTIALS = base64.b64encode(CREDENTIALS).decode()
 HEADERS = {
-    'Connection': 'close',
-    'Content-Type': 'application/json',
-    'Authorization': f'Basic {ENCODED_CREDENTIALS}'
+    "Connection": "close",
+    "Content-Type": "application/json",
+    "Authorization": f"Basic {ENCODED_CREDENTIALS}",
 }
 
-# Get the database URL from the environment variable
-DATABASE_URL = "postgresql://user:pass@10.26.42.4:5432/waect"
 
 def get_text_from_first_li(driver):
     try:
@@ -29,10 +30,11 @@ def get_text_from_first_li(driver):
     except:
         return None
 
+
 def _register_user_via_gui(driver, data):
-    register_url = "http://localhost:5000/register"
+    register_url = f"{BASE_URL}/register"
     driver.get(register_url)
-    
+
     wait = WebDriverWait(driver, 15)
     input_fields = driver.find_elements(By.TAG_NAME, "input")
 
@@ -46,8 +48,9 @@ def _register_user_via_gui(driver, data):
     li_text = wait.until(get_text_from_first_li)
     return li_text
 
+
 def _login_user_via_gui(driver, username, password):
-    login_url = "http://localhost:5000/login"
+    login_url = f"{BASE_URL}/login"
     driver.get(login_url)
 
     wait = WebDriverWait(driver, 15)
@@ -65,8 +68,9 @@ def _login_user_via_gui(driver, username, password):
     li_text = wait.until(get_text_from_first_li)
     return li_text
 
+
 def _logout_user_via_gui(driver):
-    logout_url = "http://localhost:5000/logout"
+    logout_url = f"{BASE_URL}/logout"
     driver.get(logout_url)
 
     get_text_from_first_li(driver)
@@ -75,50 +79,13 @@ def _logout_user_via_gui(driver):
     li_text = wait.until(get_text_from_first_li)
     return li_text
 
-# def _post_message_via_gui(driver, user, message_text):
-#     post_message_url = f"http://localhost:5001/add_message"
-#     driver.get(post_message_url)
-#
-#     wait = WebDriverWait(driver, 5)
-#     wait.until(EC.presence_of_element_located((By.NAME, "text")))
-#
-#     try:
-#         input_field = wait.until(EC.presence_of_element_located((By.NAME, "text")))
-#     except Exception as e:
-#         print("Failed to find the input field for posting message.")
-#         print(driver.page_source)  # Log page source for debugging
-#         raise e
-#
-#     input_field.send_keys(message_text)
-#
-#     # Click the submit button to post the message
-#     try:
-#         submit_button = driver.find_element(By.CSS_SELECTOR, "input[type='submit']")
-#         submit_button.click()
-#     except Exception as e:
-#         print("Failed to find or click the submit button.")
-#         print(driver.page_source)  # Log page source for debugging
-#         raise e
-#
-#     # Enter the message text
-#     #input_field = driver.find_element(By.NAME, "text")
-#     # input_field.send_keys(message_text)
-#
-#     # Click the submit button to post the message
-#     submit_button = driver.find_element(By.CSS_SELECTOR, "input[type='submit']")
-#     submit_button.click()
-#
-#     get_text_from_first_li(driver)
-#
-#     wait = WebDriverWait(driver, 5)
-#     li_text = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "flashes")))
-#     return li_text
 
 def _get_user_by_name(name):
     with psycopg2.connect(DATABASE_URL) as conn:
         with conn.cursor() as cur:
             cur.execute(f"SELECT username FROM users WHERE username='{name}';")
             return cur.fetchone()
+
 
 def test_register_user_via_gui():
     """
@@ -128,9 +95,12 @@ def test_register_user_via_gui():
     firefox_options = Options()
     firefox_options.add_argument("--headless")  # for visibility
     with webdriver.Firefox(options=firefox_options) as driver:
-        generated_msg = _register_user_via_gui(driver, ["user1", "user1@some.where", "waect", "waect"])
+        generated_msg = _register_user_via_gui(
+            driver, ["user1", "user1@some.where", "waect", "waect"]
+        )
         expected_msg = "You were successfully registered and can login now"
         assert generated_msg == expected_msg
+
 
 def test_register_user_via_gui_and_check_db_entry():
     """
@@ -143,12 +113,15 @@ def test_register_user_via_gui_and_check_db_entry():
         # Check that user does not exist before registration
         assert _get_user_by_name("user2") is None
 
-        generated_msg = _register_user_via_gui(driver, ["user2", "user2@some.where", "waect", "waect"])
+        generated_msg = _register_user_via_gui(
+            driver, ["user2", "user2@some.where", "waect", "waect"]
+        )
         expected_msg = "You were successfully registered and can login now"
         assert generated_msg == expected_msg
 
         # Check that user now exists in the database
         assert _get_user_by_name("user2")[0] == "user2"
+
 
 def test_login_flash_message():
     """
@@ -162,6 +135,7 @@ def test_login_flash_message():
         expected_msg = "You were logged in"
         assert generated_msg == expected_msg
 
+
 def test_logout_flash_message():
     """
     This is an end-to-end test. It checks that the flash message "You were logged out" is displayed after a user logs out.
@@ -174,16 +148,3 @@ def test_logout_flash_message():
         generated_msg = _logout_user_via_gui(driver)
         expected_msg = "You were logged out"
         assert generated_msg == expected_msg
-
-# def test_post_message_flash_message():
-#     """
-#     This is an end-to-end test. It checks that the flash message "Your message was recorded" is displayed after a user posts a message.
-#     """
-#     firefox_options = Options()
-#     firefox_options.add_argument("--headless")  # for visibility
-#     with webdriver.Firefox(options=firefox_options) as driver:
-#         _register_user_via_gui(driver, ["user2", "user1@some.where", "waect123", "waect123"])
-#         _login_user_via_gui(driver, "user2", "waect123")
-#         generated_msg = _post_message_via_gui(driver, "user2", "Die größte Befriedigung erfährt man, wenn man einer Sache über eine lange Zeit sein Herz und seine Seele schenkt – und sie es wert ist. — Steve Jobs")
-#         expected_msg = "Your message was recorded"
-#         assert generated_msg == expected_msg

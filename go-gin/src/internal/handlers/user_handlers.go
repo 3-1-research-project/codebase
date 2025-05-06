@@ -84,7 +84,7 @@ func UserTimelineHandler(c *gin.Context) {
 	session := sessions.Default(c)
 	userID := session.Get("userID")
 	if userID == nil {
-		c.Redirect(http.StatusFound, "/login") // Redirect to login page if session is invalid
+		c.Redirect(http.StatusFound, "/public") // Redirect to login page if session is invalid
 		return
 	}
 	flashMessages := session.Flashes()
@@ -98,7 +98,7 @@ func UserTimelineHandler(c *gin.Context) {
 
 	if profileUser.Username == "" {
 		fmt.Println("User not found for timeline")
-		c.AbortWithStatus(404)
+		c.Redirect(http.StatusFound, "/public")
 		return
 	}
 	if err != nil {
@@ -109,10 +109,11 @@ func UserTimelineHandler(c *gin.Context) {
 	}
 
 	// does the logged in user follow them
-	followed, _ := db.GetFollowing(userID.(int), 30) //TODO: LIMIT OF FOLLOWERS WE QUERY?
 	pUserId := profileUser.UserID
 	profileName := profileUser.Username
 	userName, _ := db.GetUserNameByUserID(userID.(int))
+
+	followed, _ := db.IsFollowing(userID.(int), pUserId)
 
 	messages, err := db.GetUserMessages(pUserId, 30)
 
@@ -143,7 +144,7 @@ func MyTimelineHandler(c *gin.Context) {
 
 	userID := session.Get("userID")
 	if userID == nil {
-		c.Redirect(http.StatusFound, "/login") // Redirect to login page if session is invalid
+		c.Redirect(http.StatusFound, "/public") // Redirect to public timeline if session is invalid
 		return
 	}
 

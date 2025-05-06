@@ -1,5 +1,8 @@
 @page "/public"
+@using Minitwit.Core.Entities
 @using Minitwit.Web.Helpers
+@using Minitwit.Web.Pages.Shared
+@inject SignInManager<Author> SignInManager
 
 @model Minitwit.Web.Pages.PublicTimelineModel
 
@@ -9,6 +12,13 @@ Layout = "Shared/_Layout";
 }
 
 <h2>Public Timeline</h2>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="twitbox"> 
+        @await Html.PartialAsync("Shared/_MessageBox", new MessageBoxModel { MessageText = "" })
+    </div>
+}
 
 @if (Model.Messages?.Any() == true)
 {
@@ -28,7 +38,6 @@ Layout = "Shared/_Layout";
     }
 </ul>
 }
-
 else
 {
 <em>There's no message so far.</em>
