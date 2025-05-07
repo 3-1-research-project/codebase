@@ -24,7 +24,7 @@ LOGGER = logging.getLogger("uvicorn")
 
 DATABASE_URL = os.environ.get(
     "DATABASE_URL"
-)  # "postgresql://user:pass@localhost:5432/waect"
+)  
 
 
 def create_folder_if_not_exists(folder_path):
