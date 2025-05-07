@@ -1,0 +1,79 @@
+services:
+  controller-minitwit:
+    image: controller-minitwit
+    build: ../.
+    container_name: controller-minitwit
+    volumes:
+      - ../..:/workspaces:cached
+    ports:
+      - 5000:5000
+    environment:
+      - DATABASE_URL=postgresql://postgres:1234@postgres-minitwit:5432/postgres
+      - DATABASE_URL_JAVA=jdbc:postgresql://postgres-minitwit:5432/postgres?user=postgres&password=1234
+      - BASE_URL=http://localhost:5000
+      - SECRET_KEY=waectsk
+    deploy:
+      resources:
+        limits:
+          cpus: "4.0"
+    networks:
+      controller-network:
+        ipv4_address: 192.168.1.5
+
+  postgres-minitwit:
+    image: postgres:17
+    container_name: postgres-minitwit
+    hostname: postgres-minitwit
+    environment:
+      - POSTGRES_PASSWORD=1234 
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5432:5432
+    volumes:
+      - ../../database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+    networks:
+      controller-network:
+        ipv4_address: 192.168.1.4
+
+  client-minitwit-0:
+    image: ghcr.io/3-1-research-project/client:3
+    container_name: client-minitwit-0
+    hostname: client-minitwit-0
+    environment:
+      - PORT=8000
+    ports:
+      - 8000:8000
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+    networks:
+      controller-network:
+        ipv4_address: 192.168.1.3
+
+  client-minitwit-1:
+    image: ghcr.io/3-1-research-project/client:3
+    container_name: client-minitwit-1
+    hostname: client-minitwit-1
+    environment:
+      - PORT=8001
+    ports:
+      - 8001:8001
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+    networks:
+      controller-network:
+        ipv4_address: 192.168.1.2
+
+networks:
+  controller-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24

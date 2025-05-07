@@ -1,9 +1,9 @@
 {
-	"name": "minitwit-implementations",
+	"name": "controller-minitwit",
 	"dockerComposeFile": [
 		"./compose.yaml"
 	],
-	"service": "minitwit-implementations",
+	"service": "controller-minitwit",
 	"workspaceFolder": "/workspaces/",
 	"remoteUser": "root",
 	"customizations": {
