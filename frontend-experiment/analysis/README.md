@@ -1,6 +1,6 @@
 # Analysis README
 
-This directory contains scripts and resources for processing and analyzing data from the OTTII system.
+This directory contains scripts and resources for processing and analyzing data from the Otii system.
 
 ## Workflow Overview
 
