@@ -19,6 +19,6 @@ This directory contains scripts and resources for processing and analyzing data 
 
 ## Usage
 
-1. Run the formatting scripts on raw OTTII data.
+1. Run the formatting scripts on raw Otii data.
 2. Use the processed data and data scheme for further analysis.
 3. Refer to `example-data` for sample input to plotting and statistical tools.
