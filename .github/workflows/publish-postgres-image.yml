@@ -2,6 +2,7 @@ name: Push Postgres Image to GitHub Container Registry
 
 on:
     pull_request:
+        types: [opened, synchronize, reopened]
         branches:
             - main
         paths:
@@ -18,7 +19,7 @@ on:
 env:
     REGISTRY: ghcr.io
     IMAGE_NAME: 3-1-frontend-experiment/postgres
-    POSTGRES_PATH: frontend-experiment/postgres/
+    DOCKERFILE_PATH: frontend-experiment/postgres/
 
 jobs:
     build-and-publish-image:
@@ -37,7 +38,7 @@ jobs:
             - name: Extract PostgreSQL version
               id: extract-version
               run: |
-                POSTGRES_VERSION=$(grep -oP '(?<=FROM postgres:)\d+' ${{ env.POSTGRES_PATH }}dockerfile)
+                POSTGRES_VERSION=$(grep -oP '(?<=FROM postgres:)\d+' ${{ env.DOCKERFILE_PATH }}dockerfile)
                 echo "POSTGRES_VERSION=$POSTGRES_VERSION" >> $GITHUB_ENV
                             
             - name: Build container image
@@ -45,13 +46,13 @@ jobs:
               id: build
               uses: docker/build-push-action@v3
               with:
-                context: ${{ env.POSTGRES_PATH }}
+                context: ${{ env.DOCKERFILE_PATH }}
                 platforms: linux/amd64,linux/arm64
                 push: false
                 tags: test-build:${{ env.POSTGRES_VERSION }}
         
             - name: Log in to the Container registry
-              if: github.event_name == 'push'
+              if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
               uses: docker/login-action@v2
               with:
                 registry: ${{ env.REGISTRY }}
@@ -59,7 +60,7 @@ jobs:
                 password: ${{ secrets.PAT }}
 
             - name: Extract metadata (tags, labels) for Docker
-              if: github.event_name == 'push'
+              if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
               id: meta
               uses: docker/metadata-action@v3
               with:
@@ -68,11 +69,11 @@ jobs:
                   ${{ env.POSTGRES_VERSION }}
 
             - name: Build and push Docker image
-              if: github.event_name == 'push'
+              if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
               id: push
               uses: docker/build-push-action@v3
               with:
-                context: ${{ env.POSTGRES_PATH }}
+                context: ${{ env.DOCKERFILE_PATH }}
                 platforms: linux/amd64,linux/arm64
                 push: true
                 tags: ${{ steps.meta.outputs.tags }}
