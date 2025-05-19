@@ -16,12 +16,6 @@ on:
 
     workflow_dispatch:
 
-permissions:
-  contents: read
-  packages: write
-  attestations: write
-  id-token: write
-
 env:
     REGISTRY: ghcr.io
     IMAGE_NAME: 3-1-frontend-experiment/postgres
@@ -30,6 +24,11 @@ env:
 jobs:
     build-and-publish-image:
         runs-on: ubuntu-latest
+        permissions:
+          contents: read
+          packages: write
+          attestations: write
+          id-token: write
 
         steps:
             - name: Checkout
