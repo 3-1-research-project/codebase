@@ -33,7 +33,7 @@ on:
 defaults:
   run:
     shell: bash
-    working-directory: ./minitwit-implementations/
+    working-directory: minitwit-implementations/
 
 env:
   BASE_URL: http://localhost:5000
