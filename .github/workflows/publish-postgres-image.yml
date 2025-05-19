@@ -2,6 +2,7 @@ name: Push Postgres Image to GitHub Container Registry
 
 on:
     pull_request:
+        types: [opened, synchronize, reopened]
         branches:
             - main
         paths:
