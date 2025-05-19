@@ -16,10 +16,6 @@ on:
 
     workflow_dispatch:
 
-permissions:
-    contents: read
-    packages: write
-
 env:
     REGISTRY: ghcr.io
     IMAGE_NAME: 3-1-frontend-experiment/database-pg
@@ -61,7 +57,7 @@ jobs:
               with:
                 registry: ${{ env.REGISTRY }}
                 username: ${{ github.actor }}
-                password: ${{ secrets.ORG_PACKAGES_TOKEN }}
+                password: ${{ secrets.PAT }}
 
             - name: Extract metadata (tags, labels) for Docker
               if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
