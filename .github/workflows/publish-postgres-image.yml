@@ -16,9 +16,15 @@ on:
 
     workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: write
+  attestations: write
+  id-token: write
+
 env:
     REGISTRY: ghcr.io
-    IMAGE_NAME: 3-1-frontend-experiment/postgres
+    IMAGE_NAME: 3-1-research-project/postgres
     DOCKERFILE_PATH: frontend-experiment/postgres/
 
 jobs:
@@ -49,7 +55,6 @@ jobs:
                 context: ${{ env.DOCKERFILE_PATH }}
                 platforms: linux/amd64,linux/arm64
                 push: false
-                tags: test-build:${{ env.POSTGRES_VERSION }}
         
             - name: Log in to the Container registry
               if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
