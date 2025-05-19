@@ -61,7 +61,7 @@ jobs:
               with:
                 registry: ${{ env.REGISTRY }}
                 username: ${{ github.actor }}
-                password: ${{ secrets.GITHUB_TOKEN }}
+                password: ${{ secrets.ORG_PACKAGES_TOKEN }}
 
             - name: Extract metadata (tags, labels) for Docker
               if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
