@@ -4,7 +4,7 @@ services:
   minitwit-python-django:
     image: minitwit
     build: .
-    container_name: minitwit
+    container_name: minitwit-python-django
     hostname: minitwit
     command: sleep infinity
     volumes:
