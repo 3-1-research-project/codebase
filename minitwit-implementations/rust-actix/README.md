@@ -82,7 +82,7 @@ To build a Rust executable follow the approach below
 cargo build --release
 ```
 
-#### Baseline
+#### Default
 
 Run the executable generated from the steps in the previous section
 

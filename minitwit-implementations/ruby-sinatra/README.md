@@ -30,7 +30,7 @@ Run the [ruby-setup.sh](./ruby-setup.sh) script to install the correct ruby vers
 
 ### How to Run Ruby with different configurations
 
-#### Baseline
+#### Default
 
 ```
 bundle exec ruby main.rb -o 0.0.0.0 -p 5000
