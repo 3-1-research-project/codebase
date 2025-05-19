@@ -69,7 +69,6 @@ async def run(
             print(f"Starting recording {i}")
             otii_project.start_recording()
 
-            # 5 sec delay to get baseline power consumption
             time.sleep(5)
 
         print(f"Starting scenario {i}")
@@ -105,7 +104,6 @@ async def run(
             )
 
         print("Clearing Database")
-        # TODO get DB URL from somewhere??
         db_cleared = await client_services[0].clear_db(database_connection_string)
         if db_cleared:
             print("DB Cleared successfully")
