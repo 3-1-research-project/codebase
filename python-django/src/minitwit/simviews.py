@@ -183,7 +183,7 @@ def follow_user(request, username):
 
 
 # Helper functions
-def query_db(query, args=(), one=False):
+def query_db(query, args=()):
     """Queries the database and returns a list of dictionaries."""
     with connection.cursor() as cursor:
         cursor.execute(query, args)

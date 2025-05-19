@@ -17,18 +17,12 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 
 
 ALLOWED_HOSTS = ["*"]
 
 APPEND_SLASH = False
-
-# Application definition
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -74,25 +68,22 @@ WSGI_APPLICATION = "minitwit.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-""" DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
-        "USER": "postgres",
-        "PASSWORD": "1234",
-        "HOST": "postgres",
-        "PORT": "5432",
-    }
-} """
+url = os.environ.get("DATABASE_URL")
+
+without_scheme = url.split("://")[1]
+credentials, host_and_db = without_scheme.split("@")
+user, password = credentials.split(":")
+host_port, db_name = host_and_db.split("/")
+host, port = host_port.split(":")
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "waect",  # Match POSTGRES_DB
-        "USER": "user",    # Match POSTGRES_USER
-        "PASSWORD": "pass",  # Match POSTGRES_PASSWORD
-        "HOST": "database",  # Match the container_name of the database service
-        "PORT": "5432",
+        "ENGINE": "django_prometheus.db.backends.postgresql",
+        "NAME": db_name,
+        "USER": user,
+        "PASSWORD": password,
+        "HOST": host,
+        "PORT": port,
     }
 }
 
@@ -114,18 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
-
-LANGUAGE_CODE = "en-us"
-
-TIME_ZONE = "UTC"
-
-USE_I18N = True
-
-USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
