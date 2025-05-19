@@ -5,7 +5,7 @@ services:
     image: minitwit-python-django
     build: .
     container_name: minitwit-python-django
-    hostname: minitwit
+    hostname: minitwit-python-django
     command: sleep infinity
     volumes:
       - ..:/workspaces:cached
