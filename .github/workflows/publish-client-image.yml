@@ -16,11 +16,16 @@ on:
 
     workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: write
+  attestations: write
+  id-token: write
 
 env:
-    REGISTRY: ghcr.io
-    IMAGE_NAME: 3-1-research-project/client
-    DOCKERFILE_PATH: frontend-experiment/client/
+  REGISTRY: ghcr.io
+  IMAGE_NAME: 3-1-research-project/client
+  DOCKERFILE_PATH: frontend-experiment/client/
 
 jobs:
     build-and-publish-image:
