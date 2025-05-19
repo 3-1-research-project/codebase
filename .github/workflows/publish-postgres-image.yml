@@ -22,8 +22,8 @@ permissions:
 
 env:
     REGISTRY: ghcr.io
-    IMAGE_NAME: 3-1-frontend-experiment/postgres
-    DOCKERFILE_PATH: frontend-experiment/postgres/
+    IMAGE_NAME: 3-1-frontend-experiment/database-pg
+    DOCKERFILE_PATH: frontend-experiment/database-pg/
 
 jobs:
     build-and-publish-image:
