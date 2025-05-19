@@ -81,14 +81,22 @@ WSGI_APPLICATION = "minitwit.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+url = os.environ.get("DATABASE_URL")
+
+without_scheme = url.split("://")[1]
+credentials, host_and_db = without_scheme.split("@")
+user, password = credentials.split(":")
+host_port, db_name = host_and_db.split("/")
+host, port = host_port.split(":")
+
 DATABASES = {
     "default": {
         "ENGINE": "django_prometheus.db.backends.postgresql",
-        "NAME": "postgres",
-        "USER": "postgres",
-        "PASSWORD": "1234",
-        "HOST": "postgres",
-        "PORT": "5432",
+        "NAME": db_name,
+        "USER": user,
+        "PASSWORD": password,
+        "HOST": host,
+        "PORT": port,
     }
 }
 
