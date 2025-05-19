@@ -1,6 +1,5 @@
 import csv
 import datetime
-import json
 from otii_tcp_client import otii_connection, otii as otii_application
 from otii_tcp_client import arc as otii_arc
 
@@ -9,7 +8,7 @@ class OtiiService:
     otii_app: any
 
     def __init__(self, host: str = "127.0.0.1", port: int = 1905):
-        connection = otii_connection.OtiiConnection("127.0.0.1", 1905)
+        connection = otii_connection.OtiiConnection(host, port)
         connect_response = connection.connect_to_server(try_for_seconds=10)
         if connect_response["type"] == "error":
             raise Exception(
@@ -49,8 +48,6 @@ class OtiiService:
         recording = otii_project.get_last_recording()
 
         current_count = recording.get_channel_data_count(device.id, "mc")
-        voltage_count = recording.get_channel_data_count(device.id, "mv")
-        power_count = recording.get_channel_data_count(device.id, "mp")
 
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         schema = schema_path.split("/")[-1].split(".")[0]
