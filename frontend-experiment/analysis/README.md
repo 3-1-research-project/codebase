@@ -18,7 +18,6 @@ This directory contains scripts and resources for processing and analyzing data 
 - `example-data/` – Contains example processed data.
 - `plot/` – Tools for data visualization.
 - `stattest/` – Scripts for statistical testing.
-- `baseline_notebook.ipynb` – Notebook for baseline data analysis.
 
 ## Usage
 
