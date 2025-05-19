@@ -16,7 +16,6 @@ This directory contains scripts and resources for processing and analyzing data 
 ## Directory Structure
 
 - `example-data/` – Contains example processed data.
-- `stattest/` – Scripts for statistical testing.
 
 ## Usage
 
