@@ -19,10 +19,16 @@ sudo apt update && sudo apt install libpq-dev
 ## Ubuntu Server 24.04.2 LTS
 
 ### Default
-`ASPNETCORE_URLS=http://0.0.0.0:5000 DATABASE_URL=postgresql://user:password@<ip-address>:5432/waect ./Minitwit.Web`
+```bashrc
+ASPNETCORE_URLS=http://0.0.0.0:5000 DATABASE_URL=postgresql://user:password@<ip-address>:5432/waect ./Minitwit.Web
+```
 
 ### Jemalloc
-`LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 ASPNETCORE_URLS=http://0.0.0.0:5000 DATABASE_URL=postgresql://user:password@<ip-address>:5432/waect ./Minitwit.Web`
+```bashrc
+LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 ASPNETCORE_URLS=http://0.0.0.0:5000 DATABASE_URL=postgresql://user:password@<ip-address>:5432/waect ./Minitwit.Web
+```
 
 ### QuickJit False
-`DOTNET_TC_QuickJit=0 ASPNETCORE_URLS=http://0.0.0.0:5000 DATABASE_URL=postgresql://user:password@<ip-address>:5432/waect ./Minitwit.Web`
+```bashrc
+DOTNET_TC_QuickJit=0 ASPNETCORE_URLS=http://0.0.0.0:5000 DATABASE_URL=postgresql://user:password@<ip-address>:5432/waect ./Minitwit.Web
+```

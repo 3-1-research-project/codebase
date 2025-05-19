@@ -18,7 +18,11 @@ Install requirements (if not done)
 ## Ubuntu Server 24.04.2 LTS
 
 ### Default
-`SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" python -m gunicorn --bind 0.0.0.0:5000 --workers 4 wsgi:app`
+```bashrc
+SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" python -m gunicorn --bind 0.0.0.0:5000 --workers 4 wsgi:app
+```
 
 ### Jemalloc
-`LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" python -m gunicorn --bind 0.0.0.0:5000 --workers 4 wsgi:app`
+```bashrc
+LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" python -m gunicorn --bind 0.0.0.0:5000 --workers 4 wsgi:app
+```

@@ -14,5 +14,6 @@ Run Jar file with environment variable:
 `DATABASE_URL_JAVA="jdbc:postgresql://<ip-address>:5432/waect?user=user&password=password" java -jar target/MiniTwit-1.0.3.jar`
 
 ## Jemalloc
-
-`LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 DATABASE_URL_JAVA="jdbc:postgresql://<ip-address>:5432/waect?user=user&password=password" java -jar target/MiniTwit-1.0.3.jar`
+```bashrc
+LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 DATABASE_URL_JAVA="jdbc:postgresql://<ip-address>:5432/waect?user=user&password=password" java -jar target/MiniTwit-1.0.3.jar
+```
