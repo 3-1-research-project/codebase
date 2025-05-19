@@ -26,17 +26,17 @@ sudo apt install npm
 ### Default
 
 ```bashrc
-SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" npm run start-node 
+SECRET_KEY="waectsk" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" npm run start-node 
 ```
 
 ### Jemalloc
 
 ```bashrc
-LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" npm run start-node 
+LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 SECRET_KEY="waectsk" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" npm run start-node 
 ```
 
 ### Jitless
 
 ```bashrc
-SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" npm run start-node --jitless
+SECRET_KEY="waectsk" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" npm run start-node --jitless
 ```

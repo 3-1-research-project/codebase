@@ -19,10 +19,10 @@ Install requirements (if not done)
 
 ### Default
 ```bashrc
-SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" python -m gunicorn --bind 0.0.0.0:5000 --workers 4 wsgi:app
+SECRET_KEY="waectsk" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" python -m gunicorn --bind 0.0.0.0:5000 --workers 4 wsgi:app
 ```
 
 ### Jemalloc
 ```bashrc
-LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" python -m gunicorn --bind 0.0.0.0:5000 --workers 4 wsgi:app
+LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 SECRET_KEY="waectsk" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" python -m gunicorn --bind 0.0.0.0:5000 --workers 4 wsgi:app
 ```

@@ -32,15 +32,15 @@ Run the [ruby-setup.sh](./ruby-setup.sh) script to install the correct ruby vers
 
 #### Default
 ```bashrc
-SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" bundle exec ruby main.rb -o 0.0.0.0 -p 5000
+SECRET_KEY="waectsk" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" bundle exec ruby main.rb -o 0.0.0.0 -p 5000
 ```
 
 #### YJIT
 ```bashrc
-SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" bundle exec ruby --yjit main.rb -o 0.0.0.0 -p 5000
+SECRET_KEY="waectsk" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" bundle exec ruby --yjit main.rb -o 0.0.0.0 -p 5000
 ```
 
 #### jemalloc
 ```bashrc
-LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" bundle exec ruby main.rb -o 0.0.0.0 -p 5000
+LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 SECRET_KEY="waectsk" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" bundle exec ruby main.rb -o 0.0.0.0 -p 5000
 ```
