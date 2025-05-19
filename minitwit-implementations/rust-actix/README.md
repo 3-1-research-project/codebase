@@ -78,15 +78,15 @@ Run [rust-setup.sh](./rust-setup.sh)
 
 To build a Rust executable follow the approach below
 
-```
+```bashrc
 cargo build --release
 ```
 
-#### Baseline
+#### Default
 
 Run the executable generated from the steps in the previous section
 
-```
+```bashrc
 # cd codebase/rust-actix/
 chmod +x target/release/waect-rust
 
@@ -99,7 +99,7 @@ Using jemalloc does not require a rebuild, but setting an environment variable w
 
 Build the executable like the baseline (see above), and the start the MiniTwit application using the following command
 
-```
+```bashrc
 LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 ./waect-rust
 ```
 
@@ -107,7 +107,7 @@ LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 ./waect-rust
 
 `PGO` takes a bit more work, as some workflow data has to be generated. We've already generated the data, but for transparency and replication reasons we show below how the data was generated
 
-```
+```bashrc
 # cd /codebase/rust-actix/
 
 rustup component add llvm-tools-preview

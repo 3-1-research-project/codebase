@@ -20,7 +20,7 @@ RUN wget https://go.dev/dl/go1.22.2.linux-amd64.tar.gz \
 - Go version = 1.22.2
 
 ### How to Run Go with different configurations
-#### Baseline
+#### Default
 ```
 go build src/main.go 
 ```

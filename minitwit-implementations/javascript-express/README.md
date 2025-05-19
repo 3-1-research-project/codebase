@@ -1,43 +1,42 @@
-# Express JS Application
+# itu-minitwit
 
-## Files included
+## Javascript Express setup guide
 
-I have only included the bare minimum.
-/app is the actual web-app
-/API is the api
+### Other prerequisites
 
-### Dependencies
+```bashrc
+sudo apt update && sudo apt install libpq-dev
+```
 
-node.js
-postgresql
+Make sure to have node package manager
 
-## How to run
+```bashrc
+sudo apt install npm
+```
 
-### Local development
+### Setup and run
 
-1. Run 'npm install in codebase/ExpressJS'
-2. Make sure to populate .env in root folder
-3. To run web-app: 'npm start', at codebase/ExpressJS
-4. To run API: 'npm run start-api' at codebase/ExpressJS
+- Install required packages with `npm install`
+- Start the app with `npm start`
 
-### How to query API
+# How to Run on Raspberry Pi
 
-- **Get latest message ID**: GET - localhost:5001/latest
-- **Get all messages**: GET - localhost:5001/msgs?latest={provide a number}
-- **Get all messages for specific user**: GET - localhost:5001/msgs/{username}?latest={provide a number}
-- **Get all followers of a user**: GET - localhost:5001/fllws/{username}?latest={provide a number}
-- **Create message from user**: POST - localhost:5001/msgs/{username}?latest={provide a number}
-  -- body: {"content": "_your message here_"}
+## Ubuntu Server 24.04.2 LTS
 
-- **Follow/Unfollow**: localhost:5001/fllw/{username}?latest={provide a number}
+### Default
 
-    -- body: {"follow": "username to follow"}
+```bashrc
+SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" npm run start-node 
+```
 
-    -- body: {"unfollow": {"username to unfollow"}}
+### Jemalloc
 
-- **Register a user**: localhost:5001/register?latest={provide a number}
-  -- body: {
-  "username": "...",
-  "email": "...",
-  "pwd": "..."
-  }
+```bashrc
+LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" npm run start-node 
+```
+
+### Jitless
+
+```bashrc
+SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" npm run start-node --jitless
+```

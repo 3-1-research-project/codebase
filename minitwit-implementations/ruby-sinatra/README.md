@@ -30,20 +30,17 @@ Run the [ruby-setup.sh](./ruby-setup.sh) script to install the correct ruby vers
 
 ### How to Run Ruby with different configurations
 
-#### Baseline
-
-```
-bundle exec ruby main.rb -o 0.0.0.0 -p 5000
+#### Default
+```bashrc
+SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" bundle exec ruby main.rb -o 0.0.0.0 -p 5000
 ```
 
 #### YJIT
-
-```
-bundle exec ruby --yjit main.rb -o 0.0.0.0 -p 5000
+```bashrc
+SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" bundle exec ruby --yjit main.rb -o 0.0.0.0 -p 5000
 ```
 
 #### jemalloc
-
-```
-LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 bundle exec ruby main.rb -o 0.0.0.0 -p 5000
+```bashrc
+LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" bundle exec ruby main.rb -o 0.0.0.0 -p 5000
 ```
