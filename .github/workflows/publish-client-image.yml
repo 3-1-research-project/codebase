@@ -6,13 +6,13 @@ on:
         branches:
             - main
         paths:
-            - frontend-experiment/postgres/**
+            - frontend-experiment/client/**
     
     push:
         branches:
             - main
         paths:
-            - frontend-experiment/postgres/**
+            - frontend-experiment/client/**
 
     workflow_dispatch:
 
