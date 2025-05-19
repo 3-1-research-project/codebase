@@ -8,18 +8,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 from . import models
 
-import gc
-
 LATEST = 0
 
-
-def garbage_collection():
-    try:
-        with open("gc_debug.log", "a") as log_file:
-            print(str(gc.get_stats()))
-            log_file.write(str(gc.get_stats()) + "\n")
-    except Exception as e:
-        return JsonResponse({"status": 500, "error_msg": str(e)}, status=500)
+MAXMESSAGES = 30
 
 
 # Get latest
@@ -72,7 +63,7 @@ def all_msgs(request):
 
     update_latest(request)
 
-    amount = int(request.GET.get("no", 100))
+    amount = int(request.GET.get("no", MAXMESSAGES))
 
     messages = models.Message.objects.all().order_by(
         "-pub_date").values()[:amount]
@@ -92,11 +83,10 @@ def user_msgs(request, username):
     if auth_check:
         return auth_check  # Returns 403 response if unauthorized
 
-    # TODO probably fix this
-    # update_latest(request)
+    update_latest(request)
 
     if request.method == "GET":
-        amount = int(request.GET.get("no", 100))
+        amount = int(request.GET.get("no", MAXMESSAGES))
         user = User.objects.get(username=username)
 
         messages = (
@@ -105,7 +95,6 @@ def user_msgs(request, username):
         )
         messages = [dict(message) for message in list(messages)]
 
-        # print(messages)
         for message in messages:
             message["content"] = message["text"]
             message["user"] = User.objects.get(id=message["user_id"]).username
@@ -174,7 +163,7 @@ def follow_user(request, username):
                 {"status": 500, "error_msg": "Internal server error"}, status=500
             )
     elif request.method == "GET":
-        amount = int(request.GET.get("no", 100))
+        amount = int(request.GET.get("no", MAXMESSAGES))
         try:
             user = User.objects.get(username=username)
         except:

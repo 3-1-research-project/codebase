@@ -144,48 +144,6 @@ STATIC_URL = "/static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# LOGGING = {
-#    "version": 1,
-#    "disable_existing_loggers": False,
-#    "formatters": {
-#        "verbose": {
-#            "format": "{asctime} {levelname} {module} {process:d} #{thread:d} {message}",
-#            "style": "{",
-#        },
-#        "simple": {
-#            "format": "{asctime} {levelname} {module} {process:d} #{thread:d} {message}",
-#            "style": "{",
-#        },
-#   },
-#    "handlers": {
-#        "file": {
-#            "level": "WARNING",
-#            "class": "logging.handlers.RotatingFileHandler",
-#            "filename": "info.log",
-#            "backupCount": 5,
-#            "maxBytes": 5242880,
-#            "formatter": "simple",
-#        },
-#    },
-#    "loggers": {
-#        "django": {
-#            "handlers": ["file"],
-#            "level": "INFO",
-#            "propagate": True,
-#        },
-#        "django.request": {
-#            "handlers": ["file"],
-#            "level": "INFO",
-#            "propagate": True,
-#        },
-#        "myproject.custom": {
-#            "handlers": ["file"],
-#            "level": "INFO",
-#            "propagate": True,
-#        },
-#    },
-# }
-# -------new logging---------#
 """ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,

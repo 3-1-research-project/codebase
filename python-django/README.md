@@ -1,20 +1,24 @@
 # MiniTwit
 
-## Project - DevOps
+## Start application
 
-This repository is our uni project for the subject DevOps.
+1. **Reopen in DevContainer**
 
-## Website
+   codebase comes with the .devcontainer folder which has the minitwit-implemenations container
 
-Our project is currently running on:
-<http://46.101.250.219:5000/>
+2. **Run the application**
 
-## Running the project
+   ```bash
+   python3 ./manage_prod.py migrate --run-syncdb
+   python3 ./manage_prod.py collectstatic
+   python3 ./manage_prod.py runserver 0.0.0.0:5000
+   ```
 
-The project is run through the use of Docker / Docker Compose:
+---
 
-```$ docker-compose server --build```
+## Access the App
 
-_To run the project on Apple Silicon Macbook:_
+Once the server is running, visit:
+[http://localhost:5000](http://localhost:5000)
 
-```$ DOCKER_DEFAULT_PLATFORM=linux/arm64 docker-compose up server --build```
+If localhost does not work try 127.0.0.1:5000
