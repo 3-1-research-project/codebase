@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  minitwit:
+  minitwit-python-django:
     image: minitwit
     build: .
     container_name: minitwit
