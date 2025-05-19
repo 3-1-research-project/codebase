@@ -3,7 +3,7 @@
     "dockerComposeFile": [
         "./compose.yaml"
     ],
-    "service": "minitwit",
+    "service": "minitwit-python-django",
     "workspaceFolder": "/workspaces/",
     "customizations": {
 		"vscode": {

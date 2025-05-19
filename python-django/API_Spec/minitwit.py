@@ -113,8 +113,6 @@ def timeline():
     redirect to the public timeline.  This timeline shows the user's
     messages as well as all the messages of followed users.
     """
-    # print(f"We got a visitor from: {str(request.remote_addr)}")
-
     if not g.user:
         return redirect(url_for("public_timeline"))
     return render_template(
@@ -147,7 +145,7 @@ def public_timeline():
     )
 
 
-@app.route("/<username>")
+@app.route("/user/<username>")
 def user_timeline(username):
     """Display's a users tweets."""
     profile_user = query_db(
