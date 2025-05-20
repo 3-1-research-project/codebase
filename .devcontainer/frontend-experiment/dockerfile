@@ -64,6 +64,15 @@ ENV PATH="$JAVA_HOME/bin:$PATH"
 WORKDIR /app/java_spring/MiniTwit
 # RUN mvn clean install -U
 
+# Install Lua and Luarocks
+RUN apt install lua5.4 liblua5.4-dev -y
+
+RUN wget https://luarocks.org/releases/luarocks-3.11.1.tar.gz \
+    && tar zxpf luarocks-3.11.1.tar.gz \
+    && cd luarocks-3.11.1 \
+    && ./configure && make && sudo make install \
+    && sudo luarocks install luasocket
+
 WORKDIR /app
 # Keep container running (for debugging)
 CMD sleep infinity

@@ -22,7 +22,8 @@
 				"ms-dotnettools.vscodeintellicode-csharp",
 				"SonarSource.sonarlint-vscode",
 				"Shopify.ruby-lsp",
-				"redhat.java"
+				"redhat.java",
+				"sumneko.lua"
 			]
 		}
 	}
