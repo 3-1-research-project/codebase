@@ -19,8 +19,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Suppressing "Cross-Origin-Opener-Policy header has been ignored" warning
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = "very secret key"
+
+#DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
