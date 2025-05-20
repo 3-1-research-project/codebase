@@ -6,21 +6,26 @@ on:
         branches:
             - main
         paths:
-            - frontend-experiment/postgres/**
+            - frontend-experiment/client/**
     
     push:
         branches:
             - main
         paths:
-            - frontend-experiment/postgres/**
+            - frontend-experiment/client/**
 
     workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: write
+  attestations: write
+  id-token: write
 
 env:
-    REGISTRY: ghcr.io
-    IMAGE_NAME: 3-1-research-project/client
-    DOCKERFILE_PATH: frontend-experiment/client/
+  REGISTRY: ghcr.io
+  IMAGE_NAME: 3-1-research-project/client
+  DOCKERFILE_PATH: frontend-experiment/client/
 
 jobs:
     build-and-publish-image:
@@ -52,15 +57,15 @@ jobs:
                 platforms: linux/amd64,linux/arm64  
 
             - name: Log in to the Container registry
-              if: github.event_name == 'push'
+              if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
               uses: docker/login-action@v2
               with:
                 registry: ${{ env.REGISTRY }}
                 username: ${{ github.actor }}
-                password: ${{ secrets.PAT }}
+                password: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Extract metadata (tags, labels) for Docker
-              if: github.event_name == 'push'
+              if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
               id: meta
               uses: docker/metadata-action@v3
               with:
@@ -69,7 +74,7 @@ jobs:
                   ${{ env.PYTHON_VERSION }}
 
             - name: Push container image
-              if: github.event_name == 'push'
+              if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
               id: push
               uses: docker/build-push-action@v3
               with:
