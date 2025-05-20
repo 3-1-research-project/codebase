@@ -1,0 +1,37 @@
+# Compiled Lua files
+*.luac
+
+# Luarocks artifacts
+*.rock
+*.rockspec
+
+# Lapis temp files
+/tmp
+/logs
+*.sqlite
+*.sqlite3
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Node modules (if using frontend tooling)
+node_modules/
+
+# Environment files
+.env
+.env.*
+
+# Coverage reports
+coverage/
+lcov.info
+
+# IDE/editor folders
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dependency lock files (optional)
+yarn.lock
+package-lock.json

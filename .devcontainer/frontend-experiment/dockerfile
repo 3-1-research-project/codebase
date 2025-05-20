@@ -64,14 +64,19 @@ ENV PATH="$JAVA_HOME/bin:$PATH"
 WORKDIR /app/java_spring/MiniTwit
 # RUN mvn clean install -U
 
-# Install Lua and Luarocks
-RUN apt install lua5.4 liblua5.4-dev -y
+# Install Lua
+RUN apt install lua5.4 liblua5.4-dev luarocks -y
 
-RUN wget https://luarocks.org/releases/luarocks-3.11.1.tar.gz \
-    && tar zxpf luarocks-3.11.1.tar.gz \
-    && cd luarocks-3.11.1 \
-    && ./configure && make && sudo make install \
-    && sudo luarocks install luasocket
+# Lapis, web framework for Lua
+RUN luarocks install lapis 
+
+# Required by lapis
+RUN apt-get update && apt-get install -y wget gnupg ca-certificates \
+    && wget -O - https://openresty.org/package/pubkey.gpg | gpg --dearmor -o /usr/share/keyrings/openresty.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/openresty.gpg] http://openresty.org/package/ubuntu jammy main" \
+        > /etc/apt/sources.list.d/openresty.list \
+    && apt-get update \
+    && apt-get install -y openresty
 
 WORKDIR /app
 # Keep container running (for debugging)
