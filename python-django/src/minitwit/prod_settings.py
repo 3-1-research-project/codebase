@@ -13,24 +13,19 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Suppressing "Cross-Origin-Opener-Policy header has been ignored" warning
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "very secret key"
 
-#DEBUG = False
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
 APPEND_SLASH = False
 
 PROMETHEUS_EXPORT_MIGRATIONS = False
-
-# Application definition
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -72,10 +67,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "minitwit.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
 url = os.environ.get("DATABASE_URL")
 
 without_scheme = url.split("://")[1]
@@ -95,10 +86,6 @@ DATABASES = {
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -114,22 +101,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Prometheus
-# PROMETHEUS_METRICS_EXPORT_PORT = 9090
-# PROMETHEUS_METRICS_EXPORT_ADDRESS = ""  # All addresses
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = "/static/"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -164,12 +140,12 @@ LOGGING = {
 LOG_VIEWER_FILES = ["info"]
 LOG_VIEWER_FILES_PATTERN = "*.log*"
 LOG_VIEWER_FILES_DIR = "/logs"
-LOG_VIEWER_PAGE_LENGTH = 25  # total log lines per-page
-LOG_VIEWER_MAX_READ_LINES = 1000  # total log lines will be read
+LOG_VIEWER_PAGE_LENGTH = 25  
+LOG_VIEWER_MAX_READ_LINES = 1000  
 LOG_VIEWER_FILE_LIST_MAX_ITEMS_PER_PAGE = (
-    25  # Max log files loaded in Datatable per page
+    25  
 )
 LOG_VIEWER_PATTERNS = ["[INFO]", "[DEBUG]", "[WARNING]", "[ERROR]", "[CRITICAL]"]
 LOG_VIEWER_EXCLUDE_TEXT_PATTERN = (
-    None  # String regex expression to exclude the log from line
+    None 
 )

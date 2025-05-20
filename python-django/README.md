@@ -39,10 +39,10 @@ If localhost does not work try 127.0.0.1:5000
 
 ### Default
 ```bashrc
-SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" python -m gunicorn --bind 0.0.0.0:5000 --workers 4 wsgi:app
+SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" python3 ./manage_prod.py runserver 0.0.0.0:5000 --workers 4 
 ```
 
 ### Jemalloc
 ```bashrc
-LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" python -m gunicorn --bind 0.0.0.0:5000 --workers 4 wsgi:app
+LD_PRELOAD=/usr/lib/<device specific architecture>/libjemalloc.so.2 SECRET_KEY="waect" DATABASE_URL="postgresql://user:password@<ip-address>:5432/waect" python3 ./manage_prod.py runserver 0.0.0.0:5000 --workers 4 
 ```
