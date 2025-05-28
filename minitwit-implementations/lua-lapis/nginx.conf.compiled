@@ -1,5 +1,6 @@
 env LAPIS_ENVIRONMENT=development;
 worker_processes 1;
+env DATABASE_URL;
 error_log stderr notice;
 daemon off;
 pid logs/nginx.pid;

@@ -1,0 +1,6 @@
+
+# Setup
+
+```
+luarocks install lapis
+```

@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<head><title>MiniTwit</title></head>
+<title>Welcome | MiniTwit</title>
+<link rel="stylesheet" type="text/css" href="/static/style.css">
+<body>
+  <% content_for("inner") %>
+</body>
