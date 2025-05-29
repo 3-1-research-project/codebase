@@ -69,8 +69,6 @@ async def run(
             print(f"Starting recording {i}")
             otii_project.start_recording()
 
-            time.sleep(5)
-
         print(f"Starting scenario {i}")
 
         results = await asyncio.gather(
